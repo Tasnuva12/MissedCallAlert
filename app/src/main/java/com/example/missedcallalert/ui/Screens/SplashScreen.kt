@@ -1,0 +1,113 @@
+package com.example.missedcallalert.ui.Screens
+
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.missedcallalert.R
+
+val roboto = FontFamily(
+    Font(R.font.archivo_condensed_semibold),
+    Font(R.font.archivo_condensed_bold),
+    Font(R.font.archivo_condensed_regular)
+)
+
+@Composable
+fun SplashScreen( modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = "background",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+
+        )
+        Column( modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Transparent),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+
+
+        ) {
+
+            Image(
+                painterResource(R.drawable.vector),
+                contentDescription = "missedcall",
+                alignment = Alignment.Center,
+                modifier = Modifier
+                    .height(106.15.dp)
+                    .width(136.15.dp),
+
+                )
+            Spacer(modifier= Modifier.padding(top=16.dp).height(8.dp).fillMaxWidth())
+            Text(text = "MISSED CALL",
+                color= Color.White,
+                textAlign = TextAlign.Center,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.W700,
+                modifier = Modifier.fillMaxWidth(),)
+            Text(text = "ALERT",
+                color= Color.White,
+                textAlign = TextAlign.Center,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.W700,
+                modifier = Modifier.fillMaxWidth(),)
+            Spacer(modifier = Modifier.height(80.dp))
+            Text(text="Welcome to",
+                color= Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = roboto,
+                fontSize = 18.sp)
+            Text(text="Missed Call Alert App",
+                color= Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontFamily = roboto,
+                fontWeight = FontWeight.Bold,
+                fontSize = 28.sp)
+
+            Text(text="Enter your number to verify",
+                color= Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontFamily = roboto,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp)
+
+        }
+
+        Row() {
+
+        }
+
+
+
+    }
+
+
+}
