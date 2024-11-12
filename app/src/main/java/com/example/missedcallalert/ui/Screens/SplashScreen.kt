@@ -13,8 +13,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,8 +43,22 @@ val roboto = FontFamily(
     Font(R.font.archivo_condensed_regular)
 )
 
+data class Country(
+    val code:String ,
+    val flagRes:Int,
+    val flagName:String
+)
+val countries= listOf(
+    Country("+880",R.drawable.bangladesh,"Bangladesh") ,
+    Country("+91",R.drawable.ic_indian_flag,"India")
+)
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SplashScreen( modifier: Modifier = Modifier) {
+    var expanded by remember { mutableStateOf(false) }
+
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
             painter = painterResource(R.drawable.background),
@@ -44,9 +67,10 @@ fun SplashScreen( modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxSize()
 
         )
-        Column( modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Transparent),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
 
@@ -62,52 +86,73 @@ fun SplashScreen( modifier: Modifier = Modifier) {
                     .width(136.15.dp),
 
                 )
-            Spacer(modifier= Modifier.padding(top=16.dp).height(8.dp).fillMaxWidth())
-            Text(text = "MISSED CALL",
-                color= Color.White,
+            Spacer(modifier = Modifier.padding(top = 16.dp).height(8.dp).fillMaxWidth())
+            Text(
+                text = "MISSED CALL",
+                color = Color.White,
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.W700,
-                modifier = Modifier.fillMaxWidth(),)
-            Text(text = "ALERT",
-                color= Color.White,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Text(
+                text = "ALERT",
+                color = Color.White,
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.W700,
-                modifier = Modifier.fillMaxWidth(),)
+                modifier = Modifier.fillMaxWidth(),
+            )
             Spacer(modifier = Modifier.height(80.dp))
-            Text(text="Welcome to",
-                color= Color.White,
+            Text(
+                text = "Welcome to",
+                color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = roboto,
-                fontSize = 18.sp)
-            Text(text="Missed Call Alert App",
-                color= Color.White,
+                fontSize = 18.sp
+            )
+            Text(
+                text = "Missed Call Alert App",
+                color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 fontFamily = roboto,
                 fontWeight = FontWeight.Bold,
-                fontSize = 28.sp)
+                fontSize = 28.sp
+            )
 
-            Text(text="Enter your number to verify",
-                color= Color.White,
+            Text(
+                text = "Enter your number to verify",
+                color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 fontFamily = roboto,
                 fontWeight = FontWeight.Normal,
-                fontSize = 16.sp)
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(80.dp))
+            CountryPhoneInput()
 
         }
 
-        Row() {
+
+
+
+    }}
+
+@Composable
+fun CountryPhoneInput() {
+    var selectedCountry by remember { mutableStateOf(countries[0]) }
+    //var phoneNumber by remember  { mutableStateOf() }
+    var expanded by remember { mutableStateOf(false) }
+
+    Column (modifier=Modifier.padding(16.dp)){
+        Row(verticalAlignment = Alignment.CenterVertically,
+        ) {
 
         }
-
-
-
     }
-
 
 }

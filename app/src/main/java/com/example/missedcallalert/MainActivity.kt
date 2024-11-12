@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MissedCallAlertTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(
+                    SplashScreen(
 
                         modifier = Modifier.padding(innerPadding)
                     )
