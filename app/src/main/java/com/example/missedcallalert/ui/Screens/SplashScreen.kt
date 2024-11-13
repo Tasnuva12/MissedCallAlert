@@ -2,21 +2,30 @@ package com.example.missedcallalert.ui.Screens
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -57,7 +66,7 @@ val countries= listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SplashScreen( modifier: Modifier = Modifier) {
-    var expanded by remember { mutableStateOf(false) }
+
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
@@ -144,15 +153,70 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 
 @Composable
 fun CountryPhoneInput() {
-    var selectedCountry by remember { mutableStateOf(countries[0]) }
-    //var phoneNumber by remember  { mutableStateOf() }
-    var expanded by remember { mutableStateOf(false) }
+    var selectedCountry by remember { mutableStateOf(countries[0]) } // Initial selected country
+    var expanded by remember { mutableStateOf(false) } // Dropdown menu state
 
-    Column (modifier=Modifier.padding(16.dp)){
-        Row(verticalAlignment = Alignment.CenterVertically,
+    Column(modifier = Modifier.padding(16.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Country code dropdown
+            Box {
+                OutlinedTextField(
+                    value = selectedCountry.code,
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier.width(120.dp),
+                    label = { Text("Country Code:") },
+                    trailingIcon = {
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
+                        }
+                    }
+                )
 
+                // Dropdown menu to select country
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    countries.forEach { country ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedCountry = country // Update selected country
+                                expanded = false // Close the dropdown
+                            },
+                            modifier = Modifier.fillMaxWidth(), // You can modify as needed
+                            leadingIcon = {
+                                Image(
+                                    painter = painterResource(id = country.flagRes),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            },
+                            text = {
+                                Text(country.flagName) // This is the main text for the dropdown item
+                            },
+                            enabled = true, // You can disable the item if needed
+
+                            contentPadding = PaddingValues(start = 8.dp) // Customize content padding if needed
+                        )
+                    }
+
+                }
+            }
+
+            // Phone number input field
+            OutlinedTextField(
+                value = "", // You can replace with phone number state
+                onValueChange = {},
+                modifier = Modifier.weight(2f),
+                label = { Text("Phone Number") }
+            )
         }
     }
-
 }
+
+
+
