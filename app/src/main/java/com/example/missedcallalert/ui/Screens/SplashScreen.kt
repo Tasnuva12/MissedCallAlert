@@ -190,6 +190,7 @@ fun CountryPhoneInput(){
                        modifier = Modifier.size(12.dp).clip(RoundedCornerShape(4.dp)),
                        contentScale = ContentScale.Crop
                    )
+
                    Spacer(modifier = Modifier.width(8.dp))
                    Image(
                        painter = painterResource(id = selectedCode.flagRes),
@@ -274,6 +275,14 @@ fun CountryPhoneInput(){
 
             }
 
+            //Code for the button
+              Box(modifier=Modifier
+                  .fillMaxWidth().clip(RoundedCornerShape(50.dp))
+                  .background(color = Color.White).padding(8.dp)
+                  .clickable {  }
+              ){
+                  Text("Generate OTP")
+              }
 
         }
 
