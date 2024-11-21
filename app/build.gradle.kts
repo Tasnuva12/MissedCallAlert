@@ -65,6 +65,14 @@ dependencies {
     implementation (libs.androidx.material.icons.core)
     implementation (libs.androidx.material.icons.extended)
 
+    // Retrofit
+    implementation (libs.retrofit)
+
+    // Retrofit Converter for JSON (Optional, if your API returns JSON)
+    implementation (libs.converter.gson)
+
+    // OkHttp for logging (Optional, for debugging network calls)
+    implementation (libs.logging.interceptor)
     implementation(libs.androidx.material3.v140alpha02)
 
 

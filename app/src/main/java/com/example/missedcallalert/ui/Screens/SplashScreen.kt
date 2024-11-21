@@ -1,6 +1,10 @@
 package com.example.missedcallalert.ui.Screens
 
 
+import android.content.Context
+import android.telecom.Call
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +26,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,8 +51,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.missedcallalert.APIServiceGenerator
+import com.example.missedcallalert.OTPResponseDataFormat
+import com.example.missedcallalert.OtpRequest
 import com.example.missedcallalert.R
 import com.example.missedcallalert.ui.theme.appColor
+import okhttp3.Callback
 
 val roboto = FontFamily(
     Font(R.font.archivo_condensed_semibold),
@@ -165,29 +173,39 @@ fun CountryPhoneInput(){
 
     var selectedCode by remember { mutableStateOf(countries.first()) }
     var phoneNo by remember { mutableStateOf("") }
-    val showDialog = remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp).height(70.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .height(70.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-           Card( modifier = Modifier.width(120.dp).height(40.dp),
+           Card( modifier = Modifier.background(appColor)
+               .width(120.dp)
+               .height(40.dp),
                shape = RoundedCornerShape(8.dp),
-               backgroundColor = appColor,
+
                border = BorderStroke(1.dp, Color.White)){
                Row(
-                   modifier = Modifier.fillMaxWidth().padding(8.dp).clickable { expanded = true },
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .padding(8.dp)
+                       .clickable { expanded = true },
                    verticalAlignment = Alignment.CenterVertically
                ){
                    Image(
                        painter = painterResource(id = R.drawable.polygon2),
                        contentDescription = "Dropdown Icon",
-                       modifier = Modifier.size(12.dp).clip(RoundedCornerShape(4.dp)),
+                       modifier = Modifier
+                           .size(12.dp)
+                           .clip(RoundedCornerShape(4.dp)),
                        contentScale = ContentScale.Crop
                    )
 
@@ -241,10 +259,10 @@ fun CountryPhoneInput(){
                 }
             Spacer(modifier = Modifier.width(16.dp))
             Card(
-                modifier = Modifier
+                modifier = Modifier.background(appColor)
                     .fillMaxWidth()
                     .height(40.dp),
-                backgroundColor = appColor,
+
                 shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(1.dp, Color.White)
             ) {
@@ -276,17 +294,64 @@ fun CountryPhoneInput(){
             }
 
             //Code for the button
-              Box(modifier=Modifier
-                  .fillMaxWidth().clip(RoundedCornerShape(50.dp))
-                  .background(color = Color.White).padding(8.dp)
-                  .clickable {  }
+              Box(modifier= Modifier
+                  .fillMaxWidth()
+                  .clip(RoundedCornerShape(50.dp))
+                  .background(color = Color.White)
+                  .padding(8.dp)
+                  .clickable {
+                      val request=OtpRequest(
+                          deviceType = 1,
+                          apiName = "otp-verification",
+                          deviceUniqueId = "67890234",
+                          username ="$phoneNo+$selectedCode" ,
+                          otp = "7456",
+                          fcmToken ="abcd1234efgh5678"
+                      )
+                      val apiService=APIServiceGenerator.apiService
+                      val call =apiService.verifyOtp(request)
+                      call.enqueue(object : retrofit2.Callback<OTPResponseDataFormat> {
+                          override fun onResponse(
+                              call: retrofit2.Call<OTPResponseDataFormat>,
+                              response: retrofit2.Response<OTPResponseDataFormat>
+                          ) {
+                              if (response.isSuccessful) {
+                                  val responseBody = response.body()
+                                  if (responseBody != null) {
+                                      println("OTP Verification Successful: ${responseBody.status}")
+                                   Log.d("Otp","Successful")
+
+                                  } else {
+
+                                      println("Response body is null")
+
+                                  }
+                              } else {
+
+                                  println("Error: ${response.code()} - ${response.message()}")
+                              }
+                          }
+
+                          override fun onFailure(call: retrofit2.Call<OTPResponseDataFormat>, t: Throwable) {
+
+                              println("Network Error: ${t.message}")
+                          }
+                      })
+                  }
+
+
               ){
                   Text("Generate OTP")
               }
 
         }
 
-    }
+
+
+
+
+}
+
 
 
 
