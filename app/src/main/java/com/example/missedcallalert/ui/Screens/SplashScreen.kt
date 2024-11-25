@@ -1,7 +1,11 @@
 package com.example.missedcallalert.ui.Screens
 
 
+import android.Manifest
 import androidx.compose.foundation.BorderStroke
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.missedcallalert.api.otpRequestFunction
 import com.example.missedcallalert.R
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
@@ -70,7 +75,7 @@ val countries= listOf(
 //UI of splashscreen
 @Composable
 fun SplashScreen( modifier: Modifier = Modifier) {
-
+    val splashScreenViewModel: SplashScreenViewModel = viewModel()
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
@@ -152,7 +157,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.height(20.dp))
             CountryPhoneInput(
-                viewModel = SplashScreenViewModel()
+                viewModel = splashScreenViewModel
             )
 
         }
@@ -164,6 +169,8 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 //function for the Dropdown menu and Phone NO field
 @Composable
 fun CountryPhoneInput(viewModel: SplashScreenViewModel){
+
+    val context = LocalContext.current
     //variables
     var expanded by remember { mutableStateOf(false) }
     val selectedCode by viewModel.country.observeAsState(countries.first())
@@ -290,17 +297,19 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
 
             //Code for the button
               Box(modifier= Modifier
-                  .fillMaxWidth()
+                  .width(250.dp)
                   .clip(RoundedCornerShape(50.dp))
                   .background(color = Color.White)
-                  .padding(8.dp)
+                  .padding(10.dp)
                   .clickable {
                      otpRequestFunction(phoneNo,selectedCode)
-                  }
+
+                  },
+                      contentAlignment = Alignment.Center
 
 
               ){
-                  Text("Generate OTP")
+                  Text("Generate OTP", color= appColor, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp))
               }
 
         }

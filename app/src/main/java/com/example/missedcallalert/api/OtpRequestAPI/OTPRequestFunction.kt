@@ -1,6 +1,13 @@
 package com.example.missedcallalert.api
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Handler
 import android.util.Log
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import com.example.missedcallalert.api.OtpRequestAPI.APIServiceGenerator
 import com.example.missedcallalert.data.Country
 import retrofit2.Call
@@ -8,6 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 fun otpRequestFunction(phoneNo: String, selectedCode: Country){
+
     val request= OtpRequest(
         username = "${selectedCode.code}$phoneNo",
         deviceType = 1,
@@ -51,5 +59,9 @@ fun otpRequestFunction(phoneNo: String, selectedCode: Country){
             println("Network Error: ${t.message}")
         }
     })
+
+
+
+
 
 }
