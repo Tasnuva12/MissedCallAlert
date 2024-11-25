@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.missedcallalert.api.otpRequestFunction
 import com.example.missedcallalert.R
-import com.example.missedcallalert.SplashScreenViewModel
+import com.example.missedcallalert.viewModels.SplashScreenViewModel
 import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.ui.Components.CustomText
 

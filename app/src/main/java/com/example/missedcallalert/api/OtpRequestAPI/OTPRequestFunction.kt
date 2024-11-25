@@ -1,7 +1,7 @@
 package com.example.missedcallalert.api
 
 import android.util.Log
-import com.example.missedcallalert.APIServiceGenerator
+import com.example.missedcallalert.api.OtpRequestAPI.APIServiceGenerator
 import com.example.missedcallalert.data.Country
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,5 +1,6 @@
-package com.example.missedcallalert
+package com.example.missedcallalert.api.OtpRequestAPI
 
+import com.example.missedcallalert.RetrofitInstance
 import com.example.missedcallalert.api.OtpApi
 
 object APIServiceGenerator {

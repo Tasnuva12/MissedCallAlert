@@ -1,6 +1,5 @@
-package com.example.missedcallalert
+package com.example.missedcallalert.viewModels
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
