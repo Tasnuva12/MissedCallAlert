@@ -29,6 +29,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,8 +46,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.missedcallalert.otpRequestFunction
 import com.example.missedcallalert.R
+import com.example.missedcallalert.SplashScreenViewModel
 import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.otpRequestFunction
 import com.example.missedcallalert.ui.Components.CustomText
@@ -150,7 +153,9 @@ fun SplashScreen( modifier: Modifier = Modifier) {
                 fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(20.dp))
-            CountryPhoneInput()
+            CountryPhoneInput(
+                viewModel = SplashScreenViewModel()
+            )
 
         }
 
@@ -160,12 +165,12 @@ fun SplashScreen( modifier: Modifier = Modifier) {
     }}
 //function for the Dropdown menu and Phone NO field
 @Composable
-fun CountryPhoneInput(){
+fun CountryPhoneInput(viewModel: SplashScreenViewModel){
     //variables
     var expanded by remember { mutableStateOf(false) }
-    var selectedCode by remember { mutableStateOf(countries.first()) }
-    var phoneNo by remember { mutableStateOf("") }
-    remember { mutableStateOf(false) }
+    val selectedCode by viewModel.country.observeAsState(countries.first())
+    val phoneNo by viewModel.phoneNumber.observeAsState("")
+
 
 
     Column(
@@ -230,7 +235,7 @@ fun CountryPhoneInput(){
                     countries.forEach { item ->
                         DropdownMenuItem(
                             onClick = {
-                                selectedCode = item
+                                viewModel. setCountryCode(item)
                                 expanded = false
                             }
                         ) {
@@ -261,7 +266,7 @@ fun CountryPhoneInput(){
                 val interactionSource = remember { MutableInteractionSource() }
                 BasicTextField(
                     value = phoneNo,
-                    onValueChange = { phoneNo = it },
+                    onValueChange = {newPhoneNo->  viewModel.setPhoneNumber(newPhoneNo) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(0.dp),
