@@ -1,4 +1,6 @@
-package com.example.missedcallalert
+package com.example.missedcallalert.data
+
+import com.example.missedcallalert.SubscriberProfile
 
 data class Data(
     val isPremium: Int,

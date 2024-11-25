@@ -1,14 +1,14 @@
-package com.example.missedcallalert
+package com.example.missedcallalert.api
 
 import android.util.Log
-import android.widget.Toast
+import com.example.missedcallalert.APIServiceGenerator
 import com.example.missedcallalert.data.Country
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 fun otpRequestFunction(phoneNo: String, selectedCode: Country){
-    val request=OtpRequest(
+    val request= OtpRequest(
         username = "${selectedCode.code}$phoneNo",
         deviceType = 1,
         deviceUniqueId = "sifat404040@gmail.com",
@@ -17,7 +17,7 @@ fun otpRequestFunction(phoneNo: String, selectedCode: Country){
         appVersionCode =1,
     )
 
-    val apiService=APIServiceGenerator.apiService
+    val apiService= APIServiceGenerator.apiService
     val call =apiService.verifyOtp(request)
 
     call.enqueue(object : Callback<OTPResponseDataFormat> {

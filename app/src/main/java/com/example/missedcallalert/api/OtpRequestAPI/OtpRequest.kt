@@ -1,4 +1,4 @@
-package com.example.missedcallalert
+package com.example.missedcallalert.api
 
 data class OtpRequest(
     val username: String,

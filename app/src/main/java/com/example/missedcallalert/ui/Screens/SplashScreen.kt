@@ -46,12 +46,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.missedcallalert.otpRequestFunction
+import com.example.missedcallalert.api.otpRequestFunction
 import com.example.missedcallalert.R
 import com.example.missedcallalert.SplashScreenViewModel
 import com.example.missedcallalert.data.Country
-import com.example.missedcallalert.otpRequestFunction
 import com.example.missedcallalert.ui.Components.CustomText
 
 import com.example.missedcallalert.ui.theme.appColor

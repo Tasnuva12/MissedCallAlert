@@ -1,4 +1,4 @@
-package com.example.missedcallalert
+package com.example.missedcallalert.api
 
 import retrofit2.Call
 import retrofit2.http.Body
