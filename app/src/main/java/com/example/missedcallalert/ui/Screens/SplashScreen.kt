@@ -77,7 +77,7 @@ val countries= listOf(
 fun SplashScreen( modifier: Modifier = Modifier) {
     val splashScreenViewModel: SplashScreenViewModel = viewModel()
 
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
         Image(
             painter = painterResource(R.drawable.background),
             contentDescription = "background",
