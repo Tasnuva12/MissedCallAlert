@@ -1,8 +1,15 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+
+
+
 }
+
 
 android {
     namespace = "com.example.missedcallalert"
@@ -18,6 +25,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -28,8 +36,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -80,8 +88,16 @@ dependencies {
     // OkHttp for logging (Optional, for debugging network calls)
     implementation (libs.logging.interceptor)
     implementation(libs.androidx.material3.v140alpha02)
+    //coroutine dependencies
+    implementation (libs.kotlinx.coroutines.android)
+    implementation (libs.kotlinx.coroutines.core)
 
 
 
-
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+}
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
