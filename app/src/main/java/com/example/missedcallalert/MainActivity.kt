@@ -19,8 +19,9 @@ import androidx.compose.ui.Modifier
 
 import com.example.missedcallalert.ui.Screens.SplashScreen
 import com.example.missedcallalert.ui.theme.MissedCallAlertTheme
+import dagger.hilt.android.HiltAndroidApp
 
-
+@HiltAndroidApp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

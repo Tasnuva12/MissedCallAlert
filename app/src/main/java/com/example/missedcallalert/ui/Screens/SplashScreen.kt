@@ -73,6 +73,7 @@ val countries= listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 //UI of splashscreen
+
 @Composable
 fun SplashScreen( modifier: Modifier = Modifier) {
     val splashScreenViewModel: SplashScreenViewModel = viewModel()

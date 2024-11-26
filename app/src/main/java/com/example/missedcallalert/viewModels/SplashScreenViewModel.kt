@@ -4,8 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.missedcallalert.data.Country
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SplashScreenViewModel:ViewModel() {
+@HiltViewModel
+class SplashScreenViewModel @Inject constructor(
+    private val otpReq
+):ViewModel() {
 
 
     //phone number

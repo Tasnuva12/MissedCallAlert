@@ -96,6 +96,9 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    //couroutine
+    implementation(libs.kotlinx.coroutines.android.v139)
 }
 // Allow references to generated code
 kapt {
