@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(
-    private val otpReq
+
 ):ViewModel() {
 
 

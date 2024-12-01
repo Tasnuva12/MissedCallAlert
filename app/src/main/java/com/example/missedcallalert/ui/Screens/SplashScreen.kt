@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.missedcallalert.api.otpRequestFunction
+import com.example.missedcallalert.api.OtpRequestRepository
 import com.example.missedcallalert.R
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
 import com.example.missedcallalert.data.Country
@@ -303,7 +303,7 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
                   .background(color = Color.White)
                   .padding(10.dp)
                   .clickable {
-                     otpRequestFunction(phoneNo,selectedCode)
+                    OtpRequestRepository(phoneNo,selectedCode)
 
                   },
                       contentAlignment = Alignment.Center
