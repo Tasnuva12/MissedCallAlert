@@ -9,6 +9,7 @@
 
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:usesCleartextTraffic="true"
 
@@ -21,7 +22,7 @@
         android:theme="@style/Theme.MissedCallAlert"
         tools:targetApi="31">
         <activity
-            android:name=".MyApplication"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MissedCallAlert">
             <intent-filter>

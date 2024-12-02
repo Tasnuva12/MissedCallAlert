@@ -58,6 +58,7 @@ import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.ui.Components.CustomText
 
 import com.example.missedcallalert.ui.theme.appColor
+import com.example.missedcallalert.viewModels.OtpViewModel
 
 val roboto = FontFamily(
     Font(R.font.archivo_condensed_semibold),
@@ -170,7 +171,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 //function for the Dropdown menu and Phone NO field
 @Composable
 fun CountryPhoneInput(viewModel: SplashScreenViewModel){
-
+    val viewModelOtp: OtpViewModel =viewModel()
     val context = LocalContext.current
     //variables
     var expanded by remember { mutableStateOf(false) }
@@ -303,7 +304,7 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
                   .background(color = Color.White)
                   .padding(10.dp)
                   .clickable {
-                    OtpRequestRepository(phoneNo,selectedCode)
+                      viewModelOtp.requestOtp(phoneNo,selectedCode)
 
                   },
                       contentAlignment = Alignment.Center

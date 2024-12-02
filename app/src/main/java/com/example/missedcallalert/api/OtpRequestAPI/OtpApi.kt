@@ -11,5 +11,5 @@ import retrofit2.http.POST
 // and get a response back, like checking if the OTP is valid.
 public interface OtpApi {
 @POST("v1/registration")
-fun requestOtp(@Body otpRequest: OtpRequest): Response<OTPResponseDataFormat>
+suspend fun requestOtp(@Body otpRequest: OtpRequest): Response<OTPResponseDataFormat>
 }

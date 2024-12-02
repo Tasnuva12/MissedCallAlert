@@ -6,17 +6,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.missedcallalert.api.OTPResponseDataFormat
 import com.example.missedcallalert.api.OtpApi
+import com.example.missedcallalert.api.OtpRequestRepository
+import com.example.missedcallalert.data.Country
+
 import kotlinx.coroutines.launch
-import retrofit2.Response
+
 import javax.inject.Inject
 
-class OtpViewModel @Inject constructor(private val otpApi: OtpApi): ViewModel() {
-    private  val  _otpResponse=MutableLiveData<Response<OTPResponseDataFormat>>()
-    val otpResponse: LiveData<Response<OTPResponseDataFormat>> get() = _otpResponse
-    fun requestOtp(phoneNumber:String){
+class OtpViewModel @Inject constructor(
+    private val otpRequestRepository: OtpRequestRepository
+): ViewModel() {
+    private val _otpResponse = MutableLiveData<Result<OTPResponseDataFormat>>()
+    val otpResponse: LiveData<Result<OTPResponseDataFormat>> get() = _otpResponse
+    fun requestOtp(phoneNumber: String, selectedCode: Country){
         viewModelScope.launch{
             try{
-                val response = otpApi.requestOtp(OtpRequest(phoneNumber))
+               val result= otpRequestRepository.otpRequestFunction(phoneNumber,selectedCode)
+                _otpResponse.postValue(result)
+
+            }catch (e:Exception){
+                _otpResponse.postValue(Result.failure(e))
             }
         }
     }

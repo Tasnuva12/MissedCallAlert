@@ -1,10 +1,8 @@
 package com.example.missedcallalert.api
 
-import android.net.nsd.NsdManager.ResolveListener
-import android.util.Log
+
 import com.example.missedcallalert.data.Country
-import retrofit2.Call
-import retrofit2.Callback
+
 
 
 import javax.inject.Inject
