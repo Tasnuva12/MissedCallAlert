@@ -7,8 +7,8 @@ import com.example.missedcallalert.data.Country
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-@HiltViewModel
-class SplashScreenViewModel @Inject constructor(
+
+class SplashScreenViewModel(
 
 ):ViewModel() {
 

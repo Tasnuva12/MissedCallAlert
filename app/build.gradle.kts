@@ -95,9 +95,10 @@ dependencies {
     implementation (libs.kotlinx.coroutines.core)
 
 
-
+   //hilt dependencies
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation (libs.androidx.hilt.navigation.compose)
 
     //couroutine
     implementation(libs.kotlinx.coroutines.android.v139)

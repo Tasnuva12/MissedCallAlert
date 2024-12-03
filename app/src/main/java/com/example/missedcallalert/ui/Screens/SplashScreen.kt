@@ -1,11 +1,7 @@
 package com.example.missedcallalert.ui.Screens
 
 
-import android.Manifest
 import androidx.compose.foundation.BorderStroke
-import android.content.Context
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -50,15 +47,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.missedcallalert.api.OtpRequestRepository
 import com.example.missedcallalert.R
-import com.example.missedcallalert.viewModels.SplashScreenViewModel
 import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.ui.Components.CustomText
-
 import com.example.missedcallalert.ui.theme.appColor
 import com.example.missedcallalert.viewModels.OtpViewModel
+import com.example.missedcallalert.viewModels.SplashScreenViewModel
+
 
 val roboto = FontFamily(
     Font(R.font.archivo_condensed_semibold),
@@ -171,7 +168,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 //function for the Dropdown menu and Phone NO field
 @Composable
 fun CountryPhoneInput(viewModel: SplashScreenViewModel){
-    val viewModelOtp: OtpViewModel =viewModel()
+    val viewModelOtp: OtpViewModel = hiltViewModel()
     val context = LocalContext.current
     //variables
     var expanded by remember { mutableStateOf(false) }

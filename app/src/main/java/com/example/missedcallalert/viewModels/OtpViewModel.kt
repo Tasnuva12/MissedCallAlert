@@ -8,11 +8,12 @@ import com.example.missedcallalert.api.OTPResponseDataFormat
 import com.example.missedcallalert.api.OtpApi
 import com.example.missedcallalert.api.OtpRequestRepository
 import com.example.missedcallalert.data.Country
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
-
+@HiltViewModel
 class OtpViewModel @Inject constructor(
     private val otpRequestRepository: OtpRequestRepository
 ): ViewModel() {
