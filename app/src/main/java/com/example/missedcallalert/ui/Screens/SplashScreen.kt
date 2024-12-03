@@ -185,7 +185,7 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
     var expanded by remember { mutableStateOf(false) }
     val selectedCode by viewModel.country.observeAsState(countries.first())
     val phoneNo by viewModel.phoneNumber.observeAsState("")
-    val permissionGranted = remember { mutableStateOf(false) }
+    var permissionGranted = remember { mutableStateOf(false) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -401,6 +401,8 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
             }
 
         }
+      
+
     }
 
 
