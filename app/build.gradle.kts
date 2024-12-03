@@ -102,6 +102,8 @@ dependencies {
 
     //couroutine
     implementation(libs.kotlinx.coroutines.android.v139)
+    //permissions
+    implementation (libs.accompanist.permissions)
 }
 // Allow references to generated code
 kapt {

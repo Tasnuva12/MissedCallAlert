@@ -1,6 +1,9 @@
 package com.example.missedcallalert.ui.Screens
 
 
+import android.graphics.Paint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,11 +21,14 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,13 +46,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.missedcallalert.R
@@ -170,10 +180,21 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 fun CountryPhoneInput(viewModel: SplashScreenViewModel){
     val viewModelOtp: OtpViewModel = hiltViewModel()
     val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
     //variables
     var expanded by remember { mutableStateOf(false) }
     val selectedCode by viewModel.country.observeAsState(countries.first())
     val phoneNo by viewModel.phoneNumber.observeAsState("")
+    val permissionGranted = remember { mutableStateOf(false) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            permissionGranted.value = isGranted
+        }
+    )
+
+
 
 
 
@@ -302,6 +323,7 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
                   .padding(10.dp)
                   .clickable {
                       viewModelOtp.requestOtp(phoneNo,selectedCode)
+                      showDialog = true
 
                   },
                       contentAlignment = Alignment.Center
@@ -312,6 +334,74 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
               }
 
         }
+    if (showDialog){
+        Dialog(
+            onDismissRequest = {showDialog=false}) {
+            Card (modifier = Modifier.fillMaxWidth().height(300.dp).padding(16.dp),shape = RoundedCornerShape(8.dp),
+
+            ){
+
+
+                    Column(modifier=Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+
+                        ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Image(
+                            painter= painterResource(R.drawable.contactbook),
+                            contentDescription = "Icon of contact Book"
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = buildAnnotatedString {
+                                append("Allow ")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Missed Call Alert")
+                                }
+                                append(" to access your contacts?")
+                            },
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.body1 // Optional, adjust the text style as needed
+                        )
+                        Spacer(modifier = Modifier.height(24.5.dp))
+                        Divider(
+                            color = appColor,
+                            thickness = 1.dp
+                        )
+                        Spacer(modifier = Modifier.height(21.5.dp))
+                        Text(
+                            text="ALLOW",
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp,
+                            fontFamily = roboto,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.clickable {
+                                launcher.launch(android.Manifest.permission.READ_CONTACTS) // Launch permission request when clicked
+                            }
+
+
+                        )
+                        Spacer(modifier = Modifier.height(21.5.dp))
+                        Divider(
+                            color = appColor,
+                            thickness = 1.dp
+                        )
+                        Spacer(modifier = Modifier.height(21.5.dp))
+                        Text(
+                            text="DON'T ALLOW",
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp,
+                            fontFamily = roboto,
+                            fontWeight = FontWeight.SemiBold,
+
+
+                            )
+                        Spacer(modifier = Modifier.height(21.5.dp))
+                    }
+
+            }
+
+        }
+    }
 
 
 
