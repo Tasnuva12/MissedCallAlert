@@ -83,7 +83,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
     val splashScreenViewModel: SplashScreenViewModel = viewModel()
     val showOTPRequest by splashScreenViewModel.showOtp.observeAsState(false)
 
-
+  
     Box(modifier = modifier
         .fillMaxSize()
         .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
