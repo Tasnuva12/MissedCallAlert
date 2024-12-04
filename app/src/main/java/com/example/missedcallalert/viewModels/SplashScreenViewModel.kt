@@ -21,6 +21,13 @@ class SplashScreenViewModel(
     private val _country=MutableLiveData<Country>()
     val country :LiveData<Country> get()= _country
 
+    //otp request send related UI state
+    private val _showOtp=MutableLiveData<Boolean>()
+    val showOtp:LiveData<Boolean>get()=_showOtp
+    fun setShowOtp(showOtp:Boolean){
+        _showOtp.value=showOtp
+    }
+
 
 
 
@@ -30,6 +37,7 @@ class SplashScreenViewModel(
     fun setCountryCode(country: Country){
         _country.value=country
     }
+
 
 
 

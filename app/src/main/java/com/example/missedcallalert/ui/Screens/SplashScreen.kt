@@ -1,7 +1,8 @@
 package com.example.missedcallalert.ui.Screens
 
 
-import android.graphics.Paint
+import android.Manifest
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -21,14 +22,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,14 +44,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -79,14 +74,19 @@ val countries= listOf(
 )
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 //UI of splashscreen
 
 @Composable
 fun SplashScreen( modifier: Modifier = Modifier) {
     val splashScreenViewModel: SplashScreenViewModel = viewModel()
+    val showOTPRequest by splashScreenViewModel.showOtp.observeAsState(false)
 
-    Box(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
+
+    Box(modifier = modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
         Image(
             painter = painterResource(R.drawable.background),
             contentDescription = "background",
@@ -118,7 +118,8 @@ fun SplashScreen( modifier: Modifier = Modifier) {
                 .padding(top = 16.dp)
                 .height(8.dp)
                 .fillMaxWidth())
-            CustomText(text = "MISSED CALL",
+            CustomText(
+                text = "MISSED CALL",
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
@@ -136,38 +137,77 @@ fun SplashScreen( modifier: Modifier = Modifier) {
                 fontFamily = roboto,
             )
             Spacer(modifier = Modifier.height(80.dp))
-            CustomText(
-                text = "Welcome to",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = roboto,
-                fontSize = 18.sp
-            )
-            CustomText(
-                text = "Missed Call Alert App",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontFamily = roboto,
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp
-            )
+            if (showOTPRequest) {
+                CustomText(
+                    text = "Welcome to",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = roboto,
+                    fontSize = 18.sp
+                )
+                CustomText(
+                    text = "Missed Call Alert App",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontFamily = roboto,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp
+                )
 
-            CustomText(
-                text = "Enter your number to verify",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontFamily = roboto,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            CountryPhoneInput(
-                viewModel = splashScreenViewModel
-            )
+                CustomText(
+                    text = "Enter your number to verify",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontFamily = roboto,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+
+                CountryPhoneInput(
+                    viewModel = splashScreenViewModel,
+                    showOTPRequest = showOTPRequest,
+                    onToggleOTPRequest = { show -> splashScreenViewModel.setShowOtp(showOTPRequest) }
+
+                )
+            }
+            else {
+                CustomText(
+                    text = "Verify Phone Number",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = roboto,
+                    fontSize = 18.sp
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                CustomText(
+                    text = "We have send you a verification code to ${splashScreenViewModel.country}",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontFamily = roboto,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                CustomText(
+                    text = "Resend Code after 55sec",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontFamily = roboto,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                )
+
+            }
+
 
         }
 
@@ -175,12 +215,24 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 
 
     }}
+
+
+
+
+
 //function for the Dropdown menu and Phone NO field
 @Composable
-fun CountryPhoneInput(viewModel: SplashScreenViewModel){
+fun CountryPhoneInput(
+    viewModel: SplashScreenViewModel,
+    showOTPRequest: Boolean, // Receive the parameter here
+    onToggleOTPRequest: (Any?) -> Unit
+){
     val viewModelOtp: OtpViewModel = hiltViewModel()
+
     val context = LocalContext.current
-    var showDialog by remember { mutableStateOf(false) }
+
+    //dialog box state
+    var  privacyPolicyDialogBox by remember { mutableStateOf(false) }
     //variables
     var expanded by remember { mutableStateOf(false) }
     val selectedCode by viewModel.country.observeAsState(countries.first())
@@ -191,7 +243,18 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
             permissionGranted.value = isGranted
+            if (permissionGranted.value) {
+
+                privacyPolicyDialogBox=true
+            } else {
+                Toast.makeText(context, "Permission denied!", Toast.LENGTH_SHORT).show()
+            }
+
         }
+
+
+
+
     )
 
 
@@ -209,7 +272,8 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
                 .height(70.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-           Card( modifier = Modifier.background(appColor)
+           Card( modifier = Modifier
+               .background(appColor)
                .width(120.dp)
                .height(40.dp),
                shape = RoundedCornerShape(8.dp),
@@ -281,7 +345,8 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
                 }
             Spacer(modifier = Modifier.width(16.dp))
             Card(
-                modifier = Modifier.background(appColor)
+                modifier = Modifier
+                    .background(appColor)
                     .fillMaxWidth()
                     .height(40.dp),
 
@@ -322,8 +387,10 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
                   .background(color = Color.White)
                   .padding(10.dp)
                   .clickable {
-                      viewModelOtp.requestOtp(phoneNo,selectedCode)
-                      showDialog = true
+                      launcher.launch(Manifest.permission.READ_CONTACTS)
+                      viewModelOtp.requestOtp(phoneNo, selectedCode)
+                      viewModel.setShowOtp(!showOTPRequest)
+
 
                   },
                       contentAlignment = Alignment.Center
@@ -334,74 +401,19 @@ fun CountryPhoneInput(viewModel: SplashScreenViewModel){
               }
 
         }
-    if (showDialog){
-        Dialog(
-            onDismissRequest = {showDialog=false}) {
-            Card (modifier = Modifier.fillMaxWidth().height(300.dp).padding(16.dp),shape = RoundedCornerShape(8.dp),
 
-            ){
-
-
-                    Column(modifier=Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
-
-                        ) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Image(
-                            painter= painterResource(R.drawable.contactbook),
-                            contentDescription = "Icon of contact Book"
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = buildAnnotatedString {
-                                append("Allow ")
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("Missed Call Alert")
-                                }
-                                append(" to access your contacts?")
-                            },
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.body1 // Optional, adjust the text style as needed
-                        )
-                        Spacer(modifier = Modifier.height(24.5.dp))
-                        Divider(
-                            color = appColor,
-                            thickness = 1.dp
-                        )
-                        Spacer(modifier = Modifier.height(21.5.dp))
-                        Text(
-                            text="ALLOW",
-                            textAlign = TextAlign.Center,
-                            fontSize = 14.sp,
-                            fontFamily = roboto,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.clickable {
-                                launcher.launch(android.Manifest.permission.READ_CONTACTS) // Launch permission request when clicked
-                            }
-
-
-                        )
-                        Spacer(modifier = Modifier.height(21.5.dp))
-                        Divider(
-                            color = appColor,
-                            thickness = 1.dp
-                        )
-                        Spacer(modifier = Modifier.height(21.5.dp))
-                        Text(
-                            text="DON'T ALLOW",
-                            textAlign = TextAlign.Center,
-                            fontSize = 14.sp,
-                            fontFamily = roboto,
-                            fontWeight = FontWeight.SemiBold,
-
-
-                            )
-                        Spacer(modifier = Modifier.height(21.5.dp))
-                    }
-
+    if(privacyPolicyDialogBox){
+        Dialog(onDismissRequest = { privacyPolicyDialogBox=false }) {
+            Card(
+                modifier = Modifier
+                    .width(370.dp)
+                    .height(677.dp)
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
+            ) {
+                   Text("this is alert box")
             }
-
         }
-      
 
     }
 
