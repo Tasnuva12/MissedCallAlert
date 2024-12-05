@@ -17,6 +17,8 @@ class SplashScreenViewModel(
 ):ViewModel() {
 
 
+    val otpValue: Any
+
     //phone number
     private val _phoneNumber=MutableLiveData<String>()
     val phoneNumber:LiveData<String> get()=_phoneNumber

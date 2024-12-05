@@ -2,14 +2,12 @@ package com.example.missedcallalert.ui.Screens
 
 
 import android.Manifest
-import androidx.compose.runtime.collectAsState
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,13 +25,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,7 +49,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,7 +59,6 @@ import com.ban.otptextfield.OtpTextField
 import com.example.missedcallalert.R
 import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.ui.Components.CustomText
-import com.example.missedcallalert.ui.theme.LightGrey
 import com.example.missedcallalert.ui.theme.appColor
 import com.example.missedcallalert.viewModels.OtpViewModel
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
@@ -178,8 +172,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 
                 CountryPhoneInput(
                     viewModel = splashScreenViewModel,
-                    showOTPRequest = showOTPRequest,
-                    onToggleOTPRequest = { show -> splashScreenViewModel.setShowOtp(showOTPRequest) }
+                    showOTPRequest = showOTPRequest
 
                 )
             }
@@ -204,8 +197,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
 @Composable
 fun CountryPhoneInput(
     viewModel: SplashScreenViewModel,
-    showOTPRequest: Boolean, // Receive the parameter here
-    onToggleOTPRequest: (Any?) -> Unit
+    showOTPRequest: Boolean // Receive the parameter here
 ){
     val viewModelOtp: OtpViewModel = hiltViewModel()
 
@@ -412,6 +404,7 @@ fun VerifyOTP(
     val remainingTime by  splashScreenViewModel.timer.observeAsState(0) // Observe remaining time
     val timerActive = remainingTime > 0
     var otpValue by remember{ mutableStateOf("") }
+
 
     LaunchedEffect(key1 = timerActive) {
         if (!timerActive) {
