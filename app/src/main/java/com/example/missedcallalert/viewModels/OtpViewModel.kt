@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.missedcallalert.api.OTPResponseDataFormat
-import com.example.missedcallalert.api.OtpApi
 import com.example.missedcallalert.api.OtpRequestRepository
 import com.example.missedcallalert.data.Country
 import dagger.hilt.android.lifecycle.HiltViewModel

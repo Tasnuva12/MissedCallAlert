@@ -8,7 +8,7 @@ import com.example.missedcallalert.data.Country
 import javax.inject.Inject
 
 class OtpRequestRepository @Inject constructor(
-    private val api: OtpApi
+    private val api: Api
 ) {
     // Use suspend function to handle network requests asynchronously
     suspend fun otpRequestFunction(phoneNo: String, selectedCode: Country): Result<OTPResponseDataFormat> {

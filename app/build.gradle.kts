@@ -104,6 +104,10 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android.v139)
     //permissions
     implementation (libs.accompanist.permissions)
+
+
+    //for using collectAsState
+    implementation(libs.androidx.runtime.livedata)
 }
 // Allow references to generated code
 kapt {

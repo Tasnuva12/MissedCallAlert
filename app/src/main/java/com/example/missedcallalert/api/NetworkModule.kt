@@ -1,12 +1,10 @@
-package com.example.missedcallalert.api.OtpRequestAPI
+package com.example.missedcallalert.api
 
-import com.example.missedcallalert.api.OtpApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Singleton
 //creates and provides the OtpApi so that
 // the app can send OTP requests to the server using Retrofit.
@@ -15,7 +13,8 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideOtpApi(retrofit: Retrofit):OtpApi{
-       return retrofit.create(OtpApi::class.java)
+    fun provideOtpApi(retrofit: Retrofit):Api{
+       return retrofit.create(Api::class.java)
     }
+
 }

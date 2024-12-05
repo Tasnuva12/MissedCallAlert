@@ -2,12 +2,14 @@ package com.example.missedcallalert.ui.Screens
 
 
 import android.Manifest
+import androidx.compose.runtime.collectAsState
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -25,13 +27,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -48,15 +53,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ban.otptextfield.OtpTextField
 import com.example.missedcallalert.R
 import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.ui.Components.CustomText
+import com.example.missedcallalert.ui.theme.LightGrey
 import com.example.missedcallalert.ui.theme.appColor
 import com.example.missedcallalert.viewModels.OtpViewModel
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
@@ -81,7 +89,7 @@ val countries= listOf(
 @Composable
 fun SplashScreen( modifier: Modifier = Modifier) {
     val splashScreenViewModel: SplashScreenViewModel = viewModel()
-    val showOTPRequest by splashScreenViewModel.showOtp.observeAsState(false)
+    val showOTPRequest by splashScreenViewModel.showOtp.observeAsState(true)
 
   
     Box(modifier = modifier
@@ -176,35 +184,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
                 )
             }
             else {
-                CustomText(
-                    text = "Verify Phone Number",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = roboto,
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                CustomText(
-                    text = "We have send you a verification code to ${splashScreenViewModel.country}",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontFamily = roboto,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                CustomText(
-                    text = "Resend Code after 55sec",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontFamily = roboto,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
-                )
+               VerifyOTP(splashScreenViewModel)
 
             }
 
@@ -420,6 +400,66 @@ fun CountryPhoneInput(
 
 
 
+
+}
+
+@Composable
+fun VerifyOTP(
+    splashScreenViewModel: SplashScreenViewModel,
+
+){
+
+    val remainingTime by  splashScreenViewModel.timer.observeAsState(0) // Observe remaining time
+    val timerActive = remainingTime > 0
+    var otpValue by remember{ mutableStateOf("") }
+
+    LaunchedEffect(key1 = timerActive) {
+        if (!timerActive) {
+            splashScreenViewModel.startTimer() // Start the timer when active
+        }
+    }
+
+    CustomText(
+        text = "Verify Phone Number",
+        color = Color.White,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = roboto,
+        fontSize = 18.sp
+    )
+    Spacer(modifier = Modifier.height(10.dp))
+    CustomText(
+        text = "We have sent you a verification code to ${splashScreenViewModel.country.value?.code.orEmpty()} *****${splashScreenViewModel.phoneNumber.value?.takeLast(1).orEmpty()}",
+        color = Color.White,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+        fontFamily = roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    )
+    Spacer(modifier = Modifier.height(2.dp))
+    CustomText(
+        text = if (timerActive) {
+            "Resend Code after ${remainingTime}sec"
+        } else {
+            "You can resend the code now"
+        },
+
+        color = Color.White,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+        fontFamily = roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    )
+    Spacer(modifier = Modifier.height(21.dp))
+    OtpTextField(
+        otpText = otpValue,
+        onOtpTextChange = { value, otpInputFilled ->
+            otpValue = value
+        }
+    )
 
 }
 
