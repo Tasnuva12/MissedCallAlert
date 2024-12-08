@@ -404,6 +404,20 @@ fun VerifyOTP(
     val remainingTime by  splashScreenViewModel.timer.observeAsState(0) // Observe remaining time
     val timerActive = remainingTime > 0
     var otpValue by remember{ mutableStateOf("") }
+    val  otpViewModel: OtpViewModel = hiltViewModel()
+    val context = LocalContext.current
+    val otpVerificationResult = otpViewModel.otpVerificationResult.observeAsState()
+    LaunchedEffect(otpVerificationResult.value) {
+        otpVerificationResult.value?.let { result ->
+            if (result.isSuccess) {
+                // Show Toast for success
+                Toast.makeText(context, "OTP Verified Successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Show Toast for failure
+                Toast.makeText(context, "OTP Verification Failed: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 
     LaunchedEffect(key1 = timerActive) {
@@ -451,6 +465,10 @@ fun VerifyOTP(
         otpText = otpValue,
         onOtpTextChange = { value, otpInputFilled ->
             otpValue = value
+            if (otpInputFilled) {
+                val username = splashScreenViewModel.phoneNumber.value ?: ""
+                otpViewModel.validateOtp(otpValue, username)
+            }
         }
     )
 

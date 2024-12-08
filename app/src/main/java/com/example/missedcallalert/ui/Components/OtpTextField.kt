@@ -38,7 +38,8 @@ fun OtpTextField(
         value = TextFieldValue(otpText, selection = TextRange(otpText.length)),
         onValueChange = {
             if (it.text.length <= otpCount) {
-                onOtpTextChange.invoke(it.text, it.text.length == otpCount)
+                val otpInputFilled = it.text.length == otpCount
+                onOtpTextChange.invoke(it.text, otpInputFilled)
             }
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),

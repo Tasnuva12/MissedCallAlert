@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.missedcallalert.api.OTPResponseDataFormat
 import com.example.missedcallalert.api.OtpRequestRepository
+import com.example.missedcallalert.api.OtpVerifictionAPI.OtpVerificationRepository
 import com.example.missedcallalert.data.Country
 import dagger.hilt.android.lifecycle.HiltViewModel
 
@@ -14,10 +15,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
 class OtpViewModel @Inject constructor(
-    private val otpRequestRepository: OtpRequestRepository
+    private val otpRequestRepository: OtpRequestRepository,
+    private val otpVerificationRepository: OtpVerificationRepository
 ): ViewModel() {
     private val _otpResponse = MutableLiveData<Result<OTPResponseDataFormat>>()
     val otpResponse: LiveData<Result<OTPResponseDataFormat>> get() = _otpResponse
+
+    private val _otpVerificationResult = MutableLiveData<Result<Boolean>>()
+    val otpVerificationResult: LiveData<Result<Boolean>> get() = _otpVerificationResult
+
+
+
+
+
     fun requestOtp(phoneNumber: String, selectedCode: Country){
         viewModelScope.launch{
             try{
@@ -26,6 +36,18 @@ class OtpViewModel @Inject constructor(
 
             }catch (e:Exception){
                 _otpResponse.postValue(Result.failure(e))
+            }
+        }
+    }
+    fun validateOtp(inputOtp: String, username: String) {
+        viewModelScope.launch {
+            try {
+                // Pass the OTP and username to the repository for verification
+                val result = otpVerificationRepository.otpVerificationFunction(inputOtp, username)
+                _otpVerificationResult.postValue(Result.success(true))
+
+            } catch (e: Exception) {
+                _otpVerificationResult.postValue(Result.success(false))
             }
         }
     }
