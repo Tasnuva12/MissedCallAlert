@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -156,7 +157,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     fontFamily = roboto,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
+                    fontSize = 25.sp
                 )
 
                 CustomText(
@@ -168,7 +169,7 @@ fun SplashScreen( modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(0.dp))
 
                 CountryPhoneInput(
                     viewModel = splashScreenViewModel,
@@ -234,23 +235,21 @@ fun CountryPhoneInput(
 
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(1.dp)
                 .height(70.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-           Card( modifier = Modifier
-               .background(appColor)
+           Box(  modifier = Modifier
+               .background(Color.Transparent) // or any other color
                .width(120.dp)
-               .height(40.dp),
-               shape = RoundedCornerShape(8.dp),
-
-               border = BorderStroke(1.dp, Color.White)){
+               .height(40.dp)
+               .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(8.dp))){
                Row(
                    modifier = Modifier
                        .fillMaxWidth()
@@ -259,12 +258,12 @@ fun CountryPhoneInput(
                    verticalAlignment = Alignment.CenterVertically
                ){
                    Image(
-                       painter = painterResource(id = R.drawable.polygon2),
+                       painter = painterResource(id = R.drawable.ic_arrow_down),
                        contentDescription = "Dropdown Icon",
                        modifier = Modifier
                            .size(12.dp)
                            .clip(RoundedCornerShape(4.dp)),
-                       contentScale = ContentScale.Crop
+
                    )
 
                    Spacer(modifier = Modifier.width(8.dp))
@@ -316,14 +315,20 @@ fun CountryPhoneInput(
                 }
                 }
             Spacer(modifier = Modifier.width(16.dp))
-            Card(
-                modifier = Modifier
-                    .background(appColor)
-                    .fillMaxWidth()
-                    .height(40.dp),
+            Box(
+//                modifier = Modifier
+//
+//                    .fillMaxWidth()
+//                    .height(40.dp),
+//
+//                shape = RoundedCornerShape(8.dp),
+//                border = BorderStroke(1.dp, Color.White)
 
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(1.dp, Color.White)
+                modifier = Modifier.fillMaxWidth()
+                    .height(40.dp)
+                    .background(Color.Transparent)
+                    .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(8.dp))
+
             ) {
                 val interactionSource = remember { MutableInteractionSource() }
                 BasicTextField(
@@ -412,6 +417,10 @@ fun VerifyOTP(
             if (result.isSuccess) {
                 // Show Toast for success
                 Toast.makeText(context, "OTP Verified Successfully!", Toast.LENGTH_SHORT).show()
+
+
+
+
             } else {
                 // Show Toast for failure
                 Toast.makeText(context, "OTP Verification Failed: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
