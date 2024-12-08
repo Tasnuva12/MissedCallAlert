@@ -246,8 +246,8 @@ fun CountryPhoneInput(
             verticalAlignment = Alignment.CenterVertically
         ) {
            Box(  modifier = Modifier
-               .background(Color.Transparent) // or any other color
-               .width(120.dp)
+               .background(Color.Transparent) //  any other color
+               .width(105.dp)
                .height(40.dp)
                .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(8.dp))){
                Row(
