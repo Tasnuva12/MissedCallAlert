@@ -108,6 +108,10 @@ dependencies {
 
     //for using collectAsState
     implementation(libs.androidx.runtime.livedata)
+    //navigation graph
+    implementation (libs.androidx.navigation.compose.v260alpha01)
+    implementation (libs.ui)
+    implementation (libs.androidx.material3.v110)
 }
 // Allow references to generated code
 kapt {

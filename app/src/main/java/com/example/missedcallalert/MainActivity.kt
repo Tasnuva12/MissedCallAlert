@@ -1,5 +1,4 @@
 package com.example.missedcallalert
-import android.window.SplashScreen
 
 import android.os.Bundle
 
@@ -15,12 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 
 import androidx.compose.ui.Modifier
+import com.example.missedcallalert.navigation.NavGraph
+import com.example.missedcallalert.ui.Screens.HomeScreen
 
 
-import com.example.missedcallalert.ui.Screens.SplashScreen
 import com.example.missedcallalert.ui.theme.MissedCallAlertTheme
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,10 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MissedCallAlertTheme {
                 Scaffold(modifier = Modifier.fillMaxSize().imePadding()) { innerPadding ->
-                    SplashScreen(
-
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                   NavGraph()
                 }
             }
         }

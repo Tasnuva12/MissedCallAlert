@@ -41,6 +41,7 @@ class SplashScreenViewModel(
             for (time in duration downTo 0) {
                 _timer.postValue(time)
                 delay(1000L) // Wait 1 second
+
             }
         }
     }

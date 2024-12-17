@@ -56,11 +56,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.ban.otptextfield.OtpTextField
 import com.example.missedcallalert.R
 import com.example.missedcallalert.data.Country
+import com.example.missedcallalert.ui.Components.CustomButton
 import com.example.missedcallalert.ui.Components.CustomText
-import com.example.missedcallalert.ui.theme.appColor
 import com.example.missedcallalert.viewModels.OtpViewModel
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
 
@@ -82,7 +83,7 @@ val countries= listOf(
 //UI of splashscreen
 
 @Composable
-fun SplashScreen( modifier: Modifier = Modifier) {
+fun SplashScreen(modifier: Modifier = Modifier, navController: NavHostController) {
     val splashScreenViewModel: SplashScreenViewModel = viewModel()
     val showOTPRequest by splashScreenViewModel.showOtp.observeAsState(true)
 
@@ -235,7 +236,9 @@ fun CountryPhoneInput(
 
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -324,7 +327,8 @@ fun CountryPhoneInput(
 //                shape = RoundedCornerShape(8.dp),
 //                border = BorderStroke(1.dp, Color.White)
 
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .height(40.dp)
                     .background(Color.Transparent)
                     .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(8.dp))
@@ -358,24 +362,21 @@ fun CountryPhoneInput(
             }
 
             //Code for the button
-              Box(modifier= Modifier
-                  .width(250.dp)
-                  .clip(RoundedCornerShape(50.dp))
-                  .background(color = Color.White)
-                  .padding(10.dp)
-                  .clickable {
-                      launcher.launch(Manifest.permission.READ_CONTACTS)
-                      viewModelOtp.requestOtp(phoneNo, selectedCode)
-                      viewModel.setShowOtp(!showOTPRequest)
+        CustomButton(
+             modifier = Modifier,
 
+            text="Generate OTP",
+            onClick = {
+                if (phoneNo != "") {
+                    launcher.launch(Manifest.permission.READ_CONTACTS)
+                    viewModelOtp.requestOtp(phoneNo, selectedCode)
+                    viewModel.setShowOtp(!showOTPRequest)
+                } else {
+                    Toast.makeText(context, "Enter your phone number first.", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-                  },
-                      contentAlignment = Alignment.Center
-
-
-              ){
-                  Text("Generate OTP", color= appColor, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp))
-              }
+         )
 
         }
 
@@ -407,6 +408,7 @@ fun VerifyOTP(
 ){
 
     val remainingTime by  splashScreenViewModel.timer.observeAsState(0) // Observe remaining time
+    var username by remember { mutableStateOf(splashScreenViewModel.phoneNumber.value ?: "") }
     val timerActive = remainingTime > 0
     var otpValue by remember{ mutableStateOf("") }
     val  otpViewModel: OtpViewModel = hiltViewModel()
@@ -458,7 +460,8 @@ fun VerifyOTP(
     CustomText(
         text = if (timerActive) {
             "Resend Code after ${remainingTime}sec"
-        } else {
+
+        } else  {
             "You can resend the code now"
         },
 
@@ -475,11 +478,39 @@ fun VerifyOTP(
         onOtpTextChange = { value, otpInputFilled ->
             otpValue = value
             if (otpInputFilled) {
-                val username = splashScreenViewModel.phoneNumber.value ?: ""
-                otpViewModel.validateOtp(otpValue, username)
+                username = splashScreenViewModel.phoneNumber.value ?: ""
+
             }
         }
     )
+    Spacer(modifier = Modifier.height(8.dp))
+    CustomButton(
+        modifier = Modifier,
+        text = "Verify",
+        onClick = { otpViewModel.validateOtp(otpValue, username)},
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    Row(modifier=Modifier) {
+        CustomText(
+            text = "No OTP yet?",
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier,
+            fontFamily = roboto,
+        )
+        CustomText(
+            text = "Retry",
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier,
+            fontFamily = roboto,
+
+        )
+    }
 
 }
 
