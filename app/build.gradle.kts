@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.5.31"
 
 
 
@@ -100,7 +101,7 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
 
-    //couroutine
+    //coroutine
     implementation(libs.kotlinx.coroutines.android.v139)
     //permissions
     implementation (libs.accompanist.permissions)
@@ -112,6 +113,10 @@ dependencies {
     implementation (libs.androidx.navigation.compose.v260alpha01)
     implementation (libs.ui)
     implementation (libs.androidx.material3.v110)
+    implementation(libs.kotlinx.serialization.json)
+
+    //SharedPreferences
+    implementation(libs.androidx.preference.ktx)
 }
 // Allow references to generated code
 kapt {

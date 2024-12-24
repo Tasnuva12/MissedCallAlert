@@ -53,12 +53,6 @@ class SplashScreenViewModel(
     }
 
 
-    //otp request send related UI state
-    private val _showOtp=MutableLiveData<Boolean>()
-    val showOtp:LiveData<Boolean>get()=_showOtp
-    fun setShowOtp(showOtp:Boolean){
-        _showOtp.value=showOtp
-    }
 
 
 

@@ -44,7 +44,7 @@ class OtpViewModel @Inject constructor(
             try {
                 // Pass the OTP and username to the repository for verification
                 val result = otpVerificationRepository.otpVerificationFunction(inputOtp, username)
-                _otpVerificationResult.postValue(Result.success(true))
+                 _otpVerificationResult.postValue(Result.success(true))
 
             } catch (e: Exception) {
                 _otpVerificationResult.postValue(Result.success(false))

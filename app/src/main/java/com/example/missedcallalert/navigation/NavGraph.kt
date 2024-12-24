@@ -1,25 +1,42 @@
 package com.example.missedcallalert.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.example.missedcallalert.Screen
 import com.example.missedcallalert.ui.Screens.HomeScreen
+import com.example.missedcallalert.ui.Screens.OtpVerificationScreen
 import com.example.missedcallalert.ui.Screens.SplashScreen
+import com.example.missedcallalert.viewModels.SplashScreenViewModel
 
 @Composable
-fun NavGraph(){
+fun NavGraph(navController: NavHostController, paddingValues: PaddingValues) {
+
     //Create NavController
-    val navController= rememberNavController()
+
 
 
     //Navigation graph set up
-    NavHost(navController = navController, startDestination = "splash") {
-        composable("splash") {
-            SplashScreen(navController=navController)
+    NavHost(navController = navController, startDestination = Screen.SplashScreen) {
+        composable<Screen.SplashScreen> {
+            SplashScreen(navController=navController,
+                modifier = Modifier.padding(paddingValues))
         }
-        composable("home") {
-            HomeScreen(navController = navController)
+        composable<Screen.OtpVerificationScreen> {
+            OtpVerificationScreen(
+                navController = navController,
+                modifier = Modifier.padding(paddingValues),
+
+            )
+        }
+        
+        composable<Screen.HomeScreen> {
+            HomeScreen(navController = navController, modifier = Modifier.padding(paddingValues))
         }
     }
 }
