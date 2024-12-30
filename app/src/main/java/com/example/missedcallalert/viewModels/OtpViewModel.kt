@@ -1,5 +1,6 @@
 package com.example.missedcallalert.viewModels
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.example.missedcallalert.api.OTPResponseDataFormat
 import com.example.missedcallalert.api.OtpRequestRepository
 import com.example.missedcallalert.api.OtpVerifictionAPI.OtpVerificationRepository
 import com.example.missedcallalert.data.Country
+import com.example.missedcallalert.data.SessionPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.launch
@@ -16,10 +18,15 @@ import javax.inject.Inject
 @HiltViewModel
 class OtpViewModel @Inject constructor(
     private val otpRequestRepository: OtpRequestRepository,
-    private val otpVerificationRepository: OtpVerificationRepository
+    private val otpVerificationRepository: OtpVerificationRepository,
+    sessionPreference: SessionPreference
+
 ): ViewModel() {
+
+    val mPref = sessionPreference
     private val _otpResponse = MutableLiveData<Result<OTPResponseDataFormat>>()
     val otpResponse: LiveData<Result<OTPResponseDataFormat>> get() = _otpResponse
+
 
     private val _otpVerificationResult = MutableLiveData<Result<Boolean>>()
     val otpVerificationResult: LiveData<Result<Boolean>> get() = _otpVerificationResult

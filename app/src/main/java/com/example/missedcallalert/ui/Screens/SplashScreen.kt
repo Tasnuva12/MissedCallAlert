@@ -208,17 +208,6 @@ fun CountryPhoneInput(
     val selectedCode by viewModel.country.observeAsState(countries.first())
     val phoneNo by viewModel.phoneNumber.observeAsState("")
 
-
-
-
-
-
-
-
-
-
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
