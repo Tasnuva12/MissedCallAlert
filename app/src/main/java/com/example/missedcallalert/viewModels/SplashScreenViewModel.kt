@@ -4,20 +4,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.missedcallalert.AppConfigurationResponse
+import com.example.missedcallalert.LoginResponse
+import com.example.missedcallalert.Resource
 import com.example.missedcallalert.data.Country
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
+class SplashScreenViewModel @Inject constructor(
 
-class SplashScreenViewModel(
 
 ):ViewModel() {
 
+    private val _appConfigFlow= MutableStateFlow<Resource<AppConfigurationResponse>>(Resource.Loading)
+    val appConfigFlow =_appConfigFlow.asStateFlow()
 
-
+    private val _loginFlow =
+        MutableStateFlow<Resource<LoginResponse?>>(Resource.Loading)
+    val loginFlow = _loginFlow.asStateFlow()
 
     //phone number
     private val _phoneNumber=MutableLiveData<String>()
@@ -26,33 +36,6 @@ class SplashScreenViewModel(
     //country code
     private val _country=MutableLiveData<Country>()
     val country :LiveData<Country> get()= _country
-
-    //for timer value
-    private val _timer =MutableLiveData<Int>()
-    val timer:LiveData<Int> get()= _timer
-
-    private var countdownJob: Job? = null
-
-    // Starts the countdown timer
-    fun startTimer(duration: Int = 55) {
-        countdownJob?.cancel() // Cancel any existing timer
-        _timer.value = duration
-        countdownJob = viewModelScope.launch {
-            for (time in duration downTo 0) {
-                _timer.postValue(time)
-                delay(1000L) // Wait 1 second
-
-            }
-        }
-    }
-
-    // Stops the countdown timer
-    fun stopTimer() {
-        countdownJob?.cancel()
-        _timer.value = 0
-    }
-
-
 
 
 

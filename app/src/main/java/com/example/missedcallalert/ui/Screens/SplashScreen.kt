@@ -31,9 +31,11 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -56,9 +58,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ban.otptextfield.OtpTextField
 import com.example.missedcallalert.R
+import com.example.missedcallalert.Screen
 import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.ui.Components.CustomButton
 import com.example.missedcallalert.ui.Components.CustomText
@@ -83,7 +87,29 @@ val countries= listOf(
 //UI of splashscreen
 
 @Composable
-fun SplashScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun SplashScreen(
+    navController: NavController?=null,
+    viewModel: SplashScreenViewModel= hiltViewModel()
+){
+
+    val appConfigState=viewModel.appConfigFlow.collectAsState()
+    val loginState = viewModel.loginFlow.collectAsState()
+    val permissionState =remember{ mutableStateOf(false) }
+    var showDialog= remember{ mutableStateOf(false) }
+    val context = LocalContext.current
+
+    var isInternetConnected by remember { mutableStateOf(true) }
+    val snackbarHostState = remember { SnackbarHostState()
+
+
+
+
+
+
+}
+
+@Composable
+fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavHostController) {
     val splashScreenViewModel: SplashScreenViewModel = viewModel()
 
 
