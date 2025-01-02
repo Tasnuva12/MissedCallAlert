@@ -2,6 +2,7 @@ package com.example.missedcallalert.ui.Screens
 
 
 import android.Manifest
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -61,6 +62,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ban.otptextfield.OtpTextField
+import com.example.missedcallalert.NetworkMonitor
 import com.example.missedcallalert.R
 import com.example.missedcallalert.Screen
 import com.example.missedcallalert.data.Country
@@ -100,6 +102,14 @@ fun SplashScreen(
 
     var isInternetConnected by remember { mutableStateOf(true) }
     val snackbarHostState = remember { SnackbarHostState()
+
+        NetworkMonitor { isConnected->
+            isInternetConnected=isConnected
+            Log.d("internet","isInternetConnected: $isInternetConnected")
+            if(!isConnected){
+
+            }
+        }
 
 
 
