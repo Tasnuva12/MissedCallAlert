@@ -28,10 +28,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,6 +60,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -70,6 +74,7 @@ import com.example.missedcallalert.ui.Components.CustomButton
 import com.example.missedcallalert.ui.Components.CustomText
 import com.example.missedcallalert.viewModels.OtpViewModel
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
+import kotlinx.coroutines.delay
 
 
 val roboto = FontFamily(
@@ -92,28 +97,52 @@ val countries= listOf(
 fun SplashScreen(
     navController: NavController?=null,
     viewModel: SplashScreenViewModel= hiltViewModel()
-){
+) {
 
-    val appConfigState=viewModel.appConfigFlow.collectAsState()
+    val appConfigState = viewModel.appConfigFlow.collectAsState()
     val loginState = viewModel.loginFlow.collectAsState()
-    val permissionState =remember{ mutableStateOf(false) }
-    var showDialog= remember{ mutableStateOf(false) }
+    val permissionState = remember { mutableStateOf(false) }
+    var showDialog = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     var isInternetConnected by remember { mutableStateOf(true) }
-    val snackbarHostState = remember { SnackbarHostState()
+    val snackbarHostState = remember {
+        SnackbarHostState()
 
-        NetworkMonitor { isConnected->
-            isInternetConnected=isConnected
-            Log.d("internet","isInternetConnected: $isInternetConnected")
-            if(!isConnected){
 
+    }
+    NetworkMonitor { isConnected->
+        isInternetConnected=isConnected
+        Log.d("internet","isInternetConnected: $isInternetConnected")
+        if(!isConnected){
+            LaunchedEffect(Unit) {
+                delay(200)
+                snackbarHostState.showSnackbar("No Internet connection", duration = SnackbarDuration.Long)
             }
         }
-
-
-
-
+    }
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { },
+            confirmButton = {},
+            text = {
+                Box(
+                    modifier = Modifier
+                        .background(color = Color.White)
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            },
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
+            ),
+            containerColor = Color.White
+        )
+    }
 
 
 }
@@ -208,11 +237,11 @@ fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavHostContro
                 )
                 Spacer(modifier = Modifier.height(0.dp))
 
-                CountryPhoneInput(
-                    viewModel = splashScreenViewModel
-
-
-                )
+//                CountryPhoneInput(
+//                    viewModel = splashScreenViewModel
+//
+//
+//                )
             }
 
 
