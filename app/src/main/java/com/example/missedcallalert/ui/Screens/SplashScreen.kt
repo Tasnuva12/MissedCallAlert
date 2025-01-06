@@ -70,6 +70,7 @@ import com.example.missedcallalert.NetworkMonitor
 import com.example.missedcallalert.R
 import com.example.missedcallalert.Screen
 import com.example.missedcallalert.data.Country
+import com.example.missedcallalert.data.SessionPreference
 import com.example.missedcallalert.ui.Components.CustomButton
 import com.example.missedcallalert.ui.Components.CustomText
 import com.example.missedcallalert.viewModels.OtpViewModel
@@ -97,6 +98,8 @@ val countries= listOf(
 fun SplashScreen(
     navController: NavController?=null,
     viewModel: SplashScreenViewModel= hiltViewModel(),
+
+
     modifier: Modifier
 ) {
 
@@ -122,6 +125,12 @@ fun SplashScreen(
             }
         }
     }
+    if(isInternetConnected){
+        Log.d("internet", "called app config")
+        LaunchedEffect(key1 = Unit) {
+            viewModel.getAppConfig()
+        }
+    }
     if (showDialog.value) {
         AlertDialog(
             onDismissRequest = { },
@@ -143,6 +152,14 @@ fun SplashScreen(
             ),
             containerColor = Color.White
         )
+    }
+    LaunchedEffect(key1 = Unit) {
+
+        // Attempt login if password is not blank
+        if (viewModel.mPref.password.isNotBlank()) {
+            showDialog.value = true
+            viewModel.login()
+        }
     }
 
 

@@ -8,6 +8,7 @@ import com.example.missedcallalert.AppConfigurationResponse
 import com.example.missedcallalert.LoginResponse
 import com.example.missedcallalert.Resource
 import com.example.missedcallalert.data.Country
+import com.example.missedcallalert.data.SessionPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,9 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(
-
+    sessionPreference: SessionPreference
 
 ):ViewModel() {
+
+    val mPref = sessionPreference
 
     private val _appConfigFlow= MutableStateFlow<Resource<AppConfigurationResponse>>(Resource.Loading)
     val appConfigFlow =_appConfigFlow.asStateFlow()
@@ -47,7 +50,13 @@ class SplashScreenViewModel @Inject constructor(
         _country.value=country
     }
 
-
-
+    fun login() {
+        viewModelScope.launch {
+            val response = resultFromExternalResponse {
+                loginApiService.execute()
+            }
+            _loginFlow.value = response
+        }
+    }
 
 }
