@@ -16,3 +16,6 @@ suspend fun requestOtp(@Body otpRequest: OtpRequest): Response<OTPResponseDataFo
 @POST("v1/otp-verification")
 suspend fun  verifyOtp(@Body otpVerify:OtpVerificationRequestDataFormat):Response<OtpVerificationResponseDataFormat>
 }
+
+@POST("v1/login/{deviceType}")
+suspend fun login(@Body)
