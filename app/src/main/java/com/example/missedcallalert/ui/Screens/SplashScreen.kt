@@ -96,7 +96,8 @@ val countries= listOf(
 @Composable
 fun SplashScreen(
     navController: NavController?=null,
-    viewModel: SplashScreenViewModel= hiltViewModel()
+    viewModel: SplashScreenViewModel= hiltViewModel(),
+    modifier: Modifier
 ) {
 
     val appConfigState = viewModel.appConfigFlow.collectAsState()
