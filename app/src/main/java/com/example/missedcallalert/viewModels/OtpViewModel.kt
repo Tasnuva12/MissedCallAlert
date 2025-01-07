@@ -72,7 +72,7 @@ class OtpViewModel @Inject constructor(
     fun login() {
        viewModelScope.launch{
            try{
-               val result=LoginRepository
+               val result=LoginRepository.
            }
        }
     }

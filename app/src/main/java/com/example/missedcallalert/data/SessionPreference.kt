@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 
 class SessionPreference(private val pref: SharedPreferences, context: Context) {
 
+    val fcmToken: String="abed1234eff5678"
+
     // Define LiveData properties
     private val _userId = MutableLiveData<Int>()
     val userId: LiveData<Int> get() = _userId
@@ -35,6 +37,7 @@ class SessionPreference(private val pref: SharedPreferences, context: Context) {
         private const val KEY_IS_PREMIUM = "isPremium"
         private const val PREF_DEVICE_TYPE = "pref_device_type"
         private const val PREF_USER_IP="pref_user_ip"
+        private const val PREF_PHONE_NUMBER = "pref_number"
     }
 
     // Method to save session data
@@ -83,4 +86,8 @@ class SessionPreference(private val pref: SharedPreferences, context: Context) {
     var userIp: String
         get() = pref.getString(PREF_USER_IP, "") ?: ""
         set(value) = pref.edit { putString(PREF_USER_IP, value) }
+
+    var phoneNumber: String
+        get() = pref.getString(PREF_PHONE_NUMBER, "") ?: ""
+        set(phoneNumber) = pref.edit { putString(PREF_PHONE_NUMBER, phoneNumber) }
 }
