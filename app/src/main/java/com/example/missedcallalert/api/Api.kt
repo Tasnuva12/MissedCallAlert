@@ -1,5 +1,6 @@
 package com.example.missedcallalert.api
 
+import com.example.missedcallalert.api.LogInAPI.LoginRequestData
 import com.example.missedcallalert.api.LogInAPI.LoginResponse
 import com.example.missedcallalert.api.OtpVerifictionAPI.OtpVerificationRequestDataFormat
 import com.example.missedcallalert.api.OtpVerifictionAPI.OtpVerificationResponseDataFormat
@@ -19,7 +20,7 @@ suspend fun  verifyOtp(@Body otpVerify:OtpVerificationRequestDataFormat):Respons
 
 
     @POST("v1/login/{deviceType}")
-    suspend fun getLoggedIn(
+    suspend fun login(
         @Path("deviceType") deviceType: Int,
         @Body loginRequest: LoginRequestData
     ): LoginResponse

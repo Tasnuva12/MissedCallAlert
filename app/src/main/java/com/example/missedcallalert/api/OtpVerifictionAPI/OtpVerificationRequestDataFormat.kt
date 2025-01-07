@@ -4,8 +4,8 @@ import com.example.missedcallalert.BaseRequest
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class OtpVerificationRequest(
+
+data class OtpVerificationRequestDataFormat(
     @SerialName("otp") val otp: String,
     @SerialName("fcmToken") val fcmToken: String
 ) : BaseRequest()

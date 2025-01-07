@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.missedcallalert.AppConfigurationResponse
 import com.example.missedcallalert.api.LogInAPI.LoginResponse
 import com.example.missedcallalert.Resource
-import com.example.missedcallalert.api.LogInAPI.LoginApiService
+import com.example.missedcallalert.api.LogInAPI.LoginRepository
 import com.example.missedcallalert.api.OTPResponseDataFormat
 import com.example.missedcallalert.api.OtpRequestRepository
 import com.example.missedcallalert.api.OtpVerifictionAPI.OtpVerificationRepository
@@ -72,7 +72,7 @@ class OtpViewModel @Inject constructor(
     fun login() {
        viewModelScope.launch{
            try{
-               val result=LoginApiService
+               val result=LoginRepository
            }
        }
     }

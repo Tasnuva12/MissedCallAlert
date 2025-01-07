@@ -2,6 +2,7 @@ package com.example.missedcallalert.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
@@ -23,6 +24,8 @@ class SessionPreference(private val pref: SharedPreferences, context: Context) {
     private val _isPremium = MutableLiveData<Int>()
     val isPremium: LiveData<Int> get() = _isPremium
 
+
+
     companion object {
         private const val PREF_NAME = "SessionPreference"
         private const val KEY_USER_ID = "userId"
@@ -30,6 +33,8 @@ class SessionPreference(private val pref: SharedPreferences, context: Context) {
         private const val KEY_PASSWORD = "password"
         private const val KEY_IS_VERIFIED = "isVerified"
         private const val KEY_IS_PREMIUM = "isPremium"
+        private const val PREF_DEVICE_TYPE = "pref_device_type"
+        private const val PREF_USER_IP="pref_user_ip"
     }
 
     // Method to save session data
@@ -71,4 +76,11 @@ class SessionPreference(private val pref: SharedPreferences, context: Context) {
         _isVerified.value = 0
         _isPremium.value = 0
     }
+
+    var deviceType: Int
+        get() = pref.getInt(PREF_DEVICE_TYPE, 1)
+        set(value) = pref.edit { putInt(PREF_DEVICE_TYPE, value) }
+    var userIp: String
+        get() = pref.getString(PREF_USER_IP, "") ?: ""
+        set(value) = pref.edit { putString(PREF_USER_IP, value) }
 }

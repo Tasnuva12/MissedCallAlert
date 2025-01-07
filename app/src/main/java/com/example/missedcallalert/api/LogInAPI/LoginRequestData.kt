@@ -4,7 +4,7 @@ import com.example.missedcallalert.BaseRequest
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-data class LoginRequest(
+data class LoginRequestData(
     @SerialName("password") val password: String,
     @SerialName("userId") val userId: String,
     @SerialName("userName") val userName: String,
