@@ -96,8 +96,8 @@ fun SplashScreen(
     modifier: Modifier
 ) {
 
-    val appConfigState = viewModel.appConfigFlow.collectAsState()
-    val loginState = viewModel.loginFlow.collectAsState()
+    val appConfigState = otpViewModel.appConfigFlow.collectAsState()
+    val loginState = otpViewModel.loginFlow.collectAsState()
     val permissionState = remember { mutableStateOf(false) }
     var showDialog = remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -244,7 +244,7 @@ fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavController
                 Spacer(modifier = Modifier.height(0.dp))
 
                 CountryPhoneInput(
-                    viewModel = splashScreenViewModel
+                    viewModel =viewModel
 
 
                 )

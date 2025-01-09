@@ -13,16 +13,20 @@ open class BaseRequest(
 //    @SerialName("deviceUniqueId") val deviceUniqueId: String,
 //    @SerialName("apiName") val apiName: String,
 //    @SerialName("appVersionCode") val appVersionCode: Int
-    @SerializedName("username")
+    @SerialName("username")
     var username:String?=null,
 
-    @SerializedName("deviceType")
+    @SerialName("deviceType")
     var deviceType:Int=0,
-    @SerializedName("apiName")
+    @SerialName("apiName")
     var apiName:String?=null,
-    @SerializedName("appVersionCode")
-    var appVersionCode:Int=0
+    @SerialName("appVersionCode")
+    var appVersionCode:Int=0,
+    @SerialName("deviceUniqueId")
+    var deviceUniqueId:String?=null
 
 
 
-)
+) {
+
+}

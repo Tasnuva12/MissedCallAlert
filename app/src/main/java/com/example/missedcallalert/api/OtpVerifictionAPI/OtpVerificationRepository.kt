@@ -1,5 +1,6 @@
 package com.example.missedcallalert.api.OtpVerifictionAPI
 
+import com.example.missedcallalert.BaseRequest
 import com.example.missedcallalert.api.Api
 import retrofit2.Response
 import javax.inject.Inject
@@ -11,15 +12,16 @@ class OtpVerificationRepository  @Inject constructor(
         otp:String,
         username:String
     ):Result<OtpVerificationResponseDataFormat>{
-       val request=OtpVerificationRequestDataFormat(
-           deviceType = 1,
-           apiName = "otp-verification",
-           appVersionCode = 1,  // Adjust if needed
-           deviceUniqueId = "sifat404040@gmail.com",
-           username = username,
-           otp = otp,
-           fcmToken = "abcd1234efgh5678"
-       )
+        val request = OtpVerificationRequestDataFormat(
+            otp = otp,
+            fcmToken = "abcd1234efgh5678"
+        ).apply {
+            this.username = username
+            this.deviceType = 1
+            this.apiName = "otp-verification"
+            this.appVersionCode = 1
+            this.deviceUniqueId = "sifat404040@gmail.com"
+        }
         return try {
             // Perform the API call synchronously with suspend function
             val response = api.verifyOtp(request) // 'verifyOtp' should be a suspend function in OtpApi

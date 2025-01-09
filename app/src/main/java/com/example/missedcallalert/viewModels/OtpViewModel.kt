@@ -24,7 +24,9 @@ import javax.inject.Inject
 class OtpViewModel @Inject constructor(
     private val otpRequestRepository: OtpRequestRepository,
     private val otpVerificationRepository: OtpVerificationRepository,
+    private val loginRepository: LoginRepository,
     sessionPreference: SessionPreference
+
 
 ): ViewModel() {
 
@@ -71,8 +73,14 @@ class OtpViewModel @Inject constructor(
 
     fun login() {
        viewModelScope.launch{
-           try{
-               val result=LoginRepository.
+           try {
+               _loginFlow.value=Resource.Loading
+               val result = loginRepository.execute()
+               _loginFlow.value=Resource.Success(result)
+
+           }catch (error: Error) {
+               // Update state to failure with the error
+               _loginFlow.value = Resource.Failure(error)
            }
        }
     }
