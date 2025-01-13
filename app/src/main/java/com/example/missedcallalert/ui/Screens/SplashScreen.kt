@@ -121,6 +121,12 @@ fun SplashScreen(
             }
         }
     }
+    if (isInternetConnected) {
+        Log.d("internet", "called app config")
+        LaunchedEffect(key1 = Unit) {
+            viewModel.getAppConfig()
+        }
+    }
     if (showDialog.value) {
         AlertDialog(
             onDismissRequest = { },
