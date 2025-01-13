@@ -1,11 +1,8 @@
 package com.example.missedcallalert.ui.Screens
 
 
-import android.Manifest
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -62,13 +59,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.ban.otptextfield.OtpTextField
 import com.example.missedcallalert.NetworkMonitor
 import com.example.missedcallalert.R
-import com.example.missedcallalert.Screen
 import com.example.missedcallalert.data.Country
 import com.example.missedcallalert.ui.Components.CustomButton
 import com.example.missedcallalert.ui.Components.CustomText
@@ -96,11 +89,15 @@ val countries= listOf(
 @Composable
 fun SplashScreen(
     navController: NavController?=null,
-    viewModel: SplashScreenViewModel= hiltViewModel()
+    viewModel: SplashScreenViewModel= hiltViewModel(),
+    otpViewModel: OtpViewModel= hiltViewModel(),
+
+
+    modifier: Modifier
 ) {
 
-    val appConfigState = viewModel.appConfigFlow.collectAsState()
-    val loginState = viewModel.loginFlow.collectAsState()
+    val appConfigState = otpViewModel.appConfigFlow.collectAsState()
+    val loginState = otpViewModel.loginFlow.collectAsState()
     val permissionState = remember { mutableStateOf(false) }
     var showDialog = remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -121,12 +118,7 @@ fun SplashScreen(
             }
         }
     }
-    if (isInternetConnected) {
-        Log.d("internet", "called app config")
-        LaunchedEffect(key1 = Unit) {
-            viewModel.getAppConfig()
-        }
-    }
+
     if (showDialog.value) {
         AlertDialog(
             onDismissRequest = { },
@@ -149,13 +141,21 @@ fun SplashScreen(
             containerColor = Color.White
         )
     }
+    LaunchedEffect(key1 = Unit) {
 
+        // Attempt login if password is not blank
+        if ( otpViewModel.mPref.password.toString().isNotBlank()) {
+            showDialog.value = true
+            otpViewModel.login()
+        }
+    }
+   SplashScreenBody(modifier,navController,viewModel)
 
 }
 
 @Composable
-fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavHostController) {
-    val splashScreenViewModel: SplashScreenViewModel = viewModel()
+fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavController?, viewModel: SplashScreenViewModel) {
+
 
 
    //SplashScreen UI
@@ -243,11 +243,11 @@ fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavHostContro
                 )
                 Spacer(modifier = Modifier.height(0.dp))
 
-//                CountryPhoneInput(
-//                    viewModel = splashScreenViewModel
-//
-//
-//                )
+                CountryPhoneInput(
+                    viewModel =viewModel
+
+
+                )
             }
 
 

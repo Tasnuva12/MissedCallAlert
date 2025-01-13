@@ -42,9 +42,9 @@ import com.example.missedcallalert.viewModels.SplashScreenViewModel
 fun OtpVerificationScreen(modifier: Modifier = Modifier,navController:NavHostController)
     {
         val splashScreenViewModel: SplashScreenViewModel = viewModel()
-        val remainingTime by  splashScreenViewModel.timer.observeAsState(0) // Observe remaining time
+       // Observe remaining time
         var username by remember { mutableStateOf(splashScreenViewModel.phoneNumber.value ?: "") }
-        val timerActive = remainingTime > 0
+
         var otpValue by remember{ mutableStateOf("") }
         val  otpViewModel: OtpViewModel = hiltViewModel()
         val context = LocalContext.current
@@ -66,11 +66,7 @@ fun OtpVerificationScreen(modifier: Modifier = Modifier,navController:NavHostCon
         }
 
 
-        LaunchedEffect(key1 = timerActive) {
-            if (!timerActive) {
-                splashScreenViewModel.startTimer() // Start the timer when active
-            }
-        }
+
 
         Box(modifier = modifier
             .fillMaxSize()
@@ -103,12 +99,7 @@ fun OtpVerificationScreen(modifier: Modifier = Modifier,navController:NavHostCon
             )
             Spacer(modifier = Modifier.height(2.dp))
             CustomText(
-                text = if (timerActive) {
-                    "Resend Code after ${remainingTime}sec"
 
-                } else  {
-                    "You can resend the code now"
-                },
 
                 color = Color.White,
                 textAlign = TextAlign.Center,
