@@ -1,11 +1,13 @@
 package com.example.missedcallalert.api
 
+import com.example.missedcallalert.AppConfigurationResponse
 import com.example.missedcallalert.api.LogInAPI.LoginRequestData
 import com.example.missedcallalert.api.LogInAPI.LoginResponse
 import com.example.missedcallalert.api.OtpVerifictionAPI.OtpVerificationRequestDataFormat
 import com.example.missedcallalert.api.OtpVerifictionAPI.OtpVerificationResponseDataFormat
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -18,13 +20,19 @@ suspend fun requestOtp(@Body otpRequest: OtpRequest): Response<OTPResponseDataFo
 @POST("v1/otp-verification")
 suspend fun  verifyOtp(@Body otpVerify:OtpVerificationRequestDataFormat):Response<OtpVerificationResponseDataFormat>
 
-
-    @POST("v1/login/{deviceType}")
+@POST("v1/login/{deviceType}")
     suspend fun login(
         @Path("deviceType") deviceType: Int,
         @Body loginRequest: LoginRequestData
     ): LoginResponse
+
+    @GET("v1/application-configurations/1")
+    suspend fun getApplicationConfigurations(): AppConfigurationResponse
+
 }
+
+
+
 
 
 

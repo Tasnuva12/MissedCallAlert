@@ -118,6 +118,7 @@ fun SplashScreen(
             }
         }
     }
+    
 
     if (showDialog.value) {
         AlertDialog(

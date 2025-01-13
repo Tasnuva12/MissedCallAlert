@@ -9,7 +9,7 @@ sealed class Resource <out T>{
 
     data class Failure <out T>(
         @SerializedName("error")
-        val error:Error
+        val error: Exception
     ):Resource<T>()
 
     data object Loading : Resource<Nothing>()
