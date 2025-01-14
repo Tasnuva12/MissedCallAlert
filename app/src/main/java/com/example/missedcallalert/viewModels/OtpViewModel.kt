@@ -31,22 +31,27 @@ class OtpViewModel @Inject constructor(
 ): ViewModel() {
 
     val mPref = sessionPreference
+    //registration (requestOTP)
     private val _otpResponse = MutableLiveData<Result<OTPResponseDataFormat>>()
     val otpResponse: LiveData<Result<OTPResponseDataFormat>> get() = _otpResponse
+
+   //app configuration
     private val _appConfigFlow= MutableStateFlow<Resource<AppConfigurationResponse>>(Resource.Loading)
     val appConfigFlow =_appConfigFlow.asStateFlow()
 
+    //login(login)
     private val _loginFlow =
         MutableStateFlow<Resource<LoginResponse?>>(Resource.Loading)
     val loginFlow = _loginFlow.asStateFlow()
 
+    //otp verification(validateOTP)
     private val _otpVerificationResult = MutableLiveData<Result<Boolean>>()
     val otpVerificationResult: LiveData<Result<Boolean>> get() = _otpVerificationResult
 
 
 
 
-
+    //otp request
     fun requestOtp(phoneNumber: String, selectedCode: Country){
         viewModelScope.launch{
             try{
@@ -58,6 +63,7 @@ class OtpViewModel @Inject constructor(
             }
         }
     }
+    //otp  validation
     fun validateOtp(inputOtp: String, username: String) {
         viewModelScope.launch {
             try {
@@ -70,7 +76,7 @@ class OtpViewModel @Inject constructor(
             }
         }
     }
-
+    //otp login
     fun login() {
        viewModelScope.launch{
            try {
@@ -85,5 +91,23 @@ class OtpViewModel @Inject constructor(
        }
     }
 
+    fun appConfig(){
+
+        viewModelScope.launch{
+            try {
+
+            }catch(){
+
+            }
+        }
+
+    }
+
+
+
+
+
+
 
 }
+

@@ -91,6 +91,8 @@ fun SplashScreen(
     navController: NavController?=null,
     viewModel: SplashScreenViewModel= hiltViewModel(),
     otpViewModel: OtpViewModel= hiltViewModel(),
+    fromNotification: Boolean? = false,
+
 
 
     modifier: Modifier
@@ -116,6 +118,12 @@ fun SplashScreen(
                 delay(200)
                 snackbarHostState.showSnackbar("No Internet connection", duration = SnackbarDuration.Long)
             }
+        }
+    }
+    if(isInternetConnected){
+        Log.d("internet","called app config")
+        LaunchedEffect(key1=Unit){
+            otpViewModel.getConfig()
         }
     }
 
@@ -154,14 +162,17 @@ fun SplashScreen(
 }
 
 @Composable
-fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavController?, viewModel: SplashScreenViewModel) {
+fun SplashScreenBody(modifier: Modifier = Modifier,
+                     navController: NavController?,
+                     viewModel: SplashScreenViewModel) {
 
 
 
    //SplashScreen UI
     Box(modifier = modifier
         .fillMaxSize()
-        .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
+        .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.Center) {
         Image(
             painter = painterResource(R.drawable.background),
             contentDescription = "background",
