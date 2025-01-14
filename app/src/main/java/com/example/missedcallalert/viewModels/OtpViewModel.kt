@@ -106,17 +106,6 @@ class OtpViewModel @Inject constructor(
         }
     }
 
-    fun appConfig(){
-
-        viewModelScope.launch{
-            try {
-
-            }catch(){
-
-            }
-        }
-
-    }
 
 
 

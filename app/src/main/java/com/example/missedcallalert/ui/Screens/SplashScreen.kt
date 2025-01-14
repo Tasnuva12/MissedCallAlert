@@ -60,6 +60,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.missedcallalert.AppConfigurationResponse
 import com.example.missedcallalert.NetworkMonitor
 import com.example.missedcallalert.R
 import com.example.missedcallalert.data.Country
@@ -67,6 +68,7 @@ import com.example.missedcallalert.ui.Components.CustomButton
 import com.example.missedcallalert.ui.Components.CustomText
 import com.example.missedcallalert.viewModels.OtpViewModel
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
+import com.google.gson.Gson
 import kotlinx.coroutines.delay
 
 
@@ -119,6 +121,12 @@ fun SplashScreen(
         }
     }
 
+    if(isInternetConnected){
+         Log.d("internet","called app config ")
+        LaunchedEffect (key1=Unit){
+            otpViewModel.getAppConfig()
+        }
+    }
     if (showDialog.value) {
         AlertDialog(
             onDismissRequest = { },
@@ -149,109 +157,193 @@ fun SplashScreen(
             otpViewModel.login()
         }
     }
-   SplashScreenBody(modifier,navController,viewModel)
+
+    if(otpViewModel.mPref.password.toString().isNotBlank()){
+        if(permissionState.value){
+            if(otpViewModel.mPref.toString().isBlank()){
+                val jsonData=otpViewModel.mPref.setAppConfigData
+                if(jsonData!=""){
+                    val appConfigData =Gson().fromJson(jsonData, AppConfigurationResponse.Data::class.java)
+                   // ShowDialog(htmlContent = appConfigData.privacyPolicy ?: "")
+                }
+            }
+        }
+    }
+
+   SplashScreenBody(navController, modifier ,viewModel,otpViewModel, isInternetConnected
+   )
 
 }
 
 @Composable
-fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavController?, viewModel: SplashScreenViewModel) {
+fun SplashScreenBody(
+
+    navController: NavController?,
+    modifier: Modifier = Modifier,
+    viewModel: SplashScreenViewModel,
+    otpViewModel: OtpViewModel,
+    isInternetConnected:Boolean
+) {
+   if(otpViewModel.mPref.password.toString().isNotBlank()) {
+       Box(
+           modifier = modifier
+               .fillMaxSize()
+               .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center
+       ) {
+           Image(
+               painter = painterResource(R.drawable.background),
+               contentDescription = "background",
+               contentScale = ContentScale.Crop,
+               modifier = Modifier.fillMaxSize()
+
+           )
+           Column(
+               modifier = Modifier
+                   .fillMaxSize()
+                   .background(Color.Transparent),
+               horizontalAlignment = Alignment.CenterHorizontally,
+               verticalArrangement = Arrangement.Center
+
+
+           ) {
+               Spacer(modifier = Modifier.height(60.dp))
+
+               Image(
+                   painterResource(R.drawable.vector),
+                   contentDescription = "missedcall",
+                   alignment = Alignment.Center,
+                   modifier = Modifier
+                       .height(106.15.dp)
+                       .width(136.15.dp),
+
+                   )
+               Spacer(
+                   modifier = Modifier
+                       .padding(top = 16.dp)
+                       .height(8.dp)
+                       .fillMaxWidth()
+               )
+               CustomText(
+                   text = "MISSED CALL",
+                   color = Color.White,
+                   textAlign = TextAlign.Center,
+                   fontSize = 30.sp,
+                   fontWeight = FontWeight.W700,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontFamily = roboto,
+               )
+               CustomText(
+                   text = "ALERT",
+                   color = Color.White,
+                   textAlign = TextAlign.Center,
+                   fontSize = 30.sp,
+                   fontWeight = FontWeight.W700,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontFamily = roboto,
+               )
+           }
+       }
+   }
+    else {
+       //SplashScreen UI
+       Box(modifier = modifier
+           .fillMaxSize()
+           .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
+           Image(
+               painter = painterResource(R.drawable.background),
+               contentDescription = "background",
+               contentScale = ContentScale.Crop,
+               modifier = Modifier.fillMaxSize()
+
+           )
+           Column(
+               modifier = Modifier
+                   .fillMaxSize()
+                   .background(Color.Transparent),
+               horizontalAlignment = Alignment.CenterHorizontally,
+               verticalArrangement = Arrangement.Center
+
+
+           ) {
+               Spacer(modifier = Modifier.height(60.dp))
+
+               Image(
+                   painterResource(R.drawable.vector),
+                   contentDescription = "missedcall",
+                   alignment = Alignment.Center,
+                   modifier = Modifier
+                       .height(106.15.dp)
+                       .width(136.15.dp),
+
+                   )
+               Spacer(modifier = Modifier
+                   .padding(top = 16.dp)
+                   .height(8.dp)
+                   .fillMaxWidth())
+               CustomText(
+                   text = "MISSED CALL",
+                   color = Color.White,
+                   textAlign = TextAlign.Center,
+                   fontSize = 30.sp,
+                   fontWeight = FontWeight.W700,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontFamily = roboto,
+               )
+               CustomText(
+                   text = "ALERT",
+                   color = Color.White,
+                   textAlign = TextAlign.Center,
+                   fontSize = 30.sp,
+                   fontWeight = FontWeight.W700,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontFamily = roboto,
+               )
+               Spacer(modifier = Modifier.height(80.dp))
+
+               CustomText(
+                   text = "Welcome to",
+                   color = Color.White,
+                   textAlign = TextAlign.Center,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontWeight = FontWeight.SemiBold,
+                   fontFamily = roboto,
+                   fontSize = 18.sp
+               )
+               CustomText(
+                   text = "Missed Call Alert App",
+                   color = Color.White,
+                   textAlign = TextAlign.Center,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontFamily = roboto,
+                   fontWeight = FontWeight.Bold,
+                   fontSize = 25.sp
+               )
+
+               CustomText(
+                   text = "Enter your number to verify",
+                   color = Color.White,
+                   textAlign = TextAlign.Center,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontFamily = roboto,
+                   fontWeight = FontWeight.Normal,
+                   fontSize = 16.sp
+               )
+               Spacer(modifier = Modifier.height(0.dp))
+
+               CountryPhoneInput(
+                   navController, viewModel,isInternetConnected,snackbarHostState
+
+
+               )
+           }
+
+
+       }
+   }
 
 
 
-   //SplashScreen UI
-    Box(modifier = modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
-        Image(
-            painter = painterResource(R.drawable.background),
-            contentDescription = "background",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
 
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-
-
-        ) {
-            Spacer(modifier = Modifier.height(60.dp))
-
-            Image(
-                painterResource(R.drawable.vector),
-                contentDescription = "missedcall",
-                alignment = Alignment.Center,
-                modifier = Modifier
-                    .height(106.15.dp)
-                    .width(136.15.dp),
-
-                )
-            Spacer(modifier = Modifier
-                .padding(top = 16.dp)
-                .height(8.dp)
-                .fillMaxWidth())
-            CustomText(
-                text = "MISSED CALL",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.W700,
-                modifier = Modifier.fillMaxWidth(),
-                fontFamily = roboto,
-            )
-            CustomText(
-                text = "ALERT",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.W700,
-                modifier = Modifier.fillMaxWidth(),
-                fontFamily = roboto,
-            )
-            Spacer(modifier = Modifier.height(80.dp))
-
-                CustomText(
-                    text = "Welcome to",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = roboto,
-                    fontSize = 18.sp
-                )
-                CustomText(
-                    text = "Missed Call Alert App",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontFamily = roboto,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp
-                )
-
-                CustomText(
-                    text = "Enter your number to verify",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontFamily = roboto,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.height(0.dp))
-
-                CountryPhoneInput(
-                    viewModel =viewModel
-
-
-                )
-            }
-
-
-        }
 
 
 
@@ -265,7 +357,10 @@ fun SplashScreenBody(modifier: Modifier = Modifier, navController: NavController
 //function for the Dropdown menu and Phone NO field
 @Composable
 fun CountryPhoneInput(
+    navController: NavController?=null,
     viewModel: SplashScreenViewModel,
+    isInternetConnected: Boolean,snackbarHostState: SnackbarHostState
+
 
 ){
     val viewModelOtp: OtpViewModel = hiltViewModel()
@@ -446,7 +541,10 @@ fun CountryPhoneInput(
 
 }
 
+@Composable
+fun ShowDialog(){
 
+}
 
 
 
