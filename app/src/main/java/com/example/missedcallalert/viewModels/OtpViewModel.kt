@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.missedcallalert.AppConfigurationResponse
+import com.example.missedcallalert.AppConfigurationService
 import com.example.missedcallalert.api.LogInAPI.LoginResponse
 import com.example.missedcallalert.Resource
 import com.example.missedcallalert.api.LogInAPI.LoginRepository
@@ -25,6 +26,7 @@ class OtpViewModel @Inject constructor(
     private val otpRequestRepository: OtpRequestRepository,
     private val otpVerificationRepository: OtpVerificationRepository,
     private val loginRepository: LoginRepository,
+    private val  applicationConfigurationService: AppConfigurationService,
     sessionPreference: SessionPreference
 
 
@@ -84,11 +86,24 @@ class OtpViewModel @Inject constructor(
                val result = loginRepository.execute()
                _loginFlow.value=Resource.Success(result)
 
-           }catch (error: Error) {
+           }catch (error: Exception) {
                // Update state to failure with the error
                _loginFlow.value = Resource.Failure(error)
            }
        }
+    }
+    fun getAppConfig(){
+        viewModelScope.launch{
+            try{
+                _appConfigFlow.value=Resource.Loading
+                val result=applicationConfigurationService.execute()
+                _appConfigFlow.value= Resource.Success(result)
+
+            }
+            catch(error: Exception){
+                _appConfigFlow.value=Resource.Failure(error)
+            }
+        }
     }
 
     fun appConfig(){
