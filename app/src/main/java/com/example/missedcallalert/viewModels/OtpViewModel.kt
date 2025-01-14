@@ -34,8 +34,8 @@ class OtpViewModel @Inject constructor(
 
     val mPref = sessionPreference
     //registration (requestOTP)
-    private val _otpResponse = MutableLiveData<Result<OTPResponseDataFormat>>()
-    val otpResponse: LiveData<Result<OTPResponseDataFormat>> get() = _otpResponse
+    private val _otpResponse =  MutableStateFlow<Resource<OTPResponseDataFormat>>(Resource.Loading)
+    val otpResponse = _otpResponse.asStateFlow()
 
    //app configuration
     private val _appConfigFlow= MutableStateFlow<Resource<AppConfigurationResponse>>(Resource.Loading)
