@@ -2,7 +2,10 @@ package com.example.missedcallalert.ui.Screens
 
 
 import android.app.AlertDialog
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -22,6 +25,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -30,6 +34,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -59,6 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -98,12 +104,13 @@ val countries = listOf(
 @Composable
 fun SplashScreen(
     navController: NavController? = null,
+    modifier: Modifier,
     viewModel: SplashScreenViewModel = hiltViewModel(),
     otpViewModel: OtpViewModel = hiltViewModel(),
-    snackbarHostState: SnackbarHostState,
 
 
-    modifier: Modifier
+
+
 ) {
 
     val appConfigState = otpViewModel.appConfigFlow.collectAsState()
@@ -176,7 +183,7 @@ fun SplashScreen(
                 if (jsonData != "") {
                     val appConfigData =
                         Gson().fromJson(jsonData, AppConfigurationResponse.Data::class.java)
-                    // ShowDialog(htmlContent = appConfigData.privacyPolicy ?: "")
+                     ShowDialog(htmlContent = appConfigData.privacyPolicy ?: "")
                 }
             }
         }
@@ -402,6 +409,7 @@ fun CountryPhoneInput(
                     popUpTo(Screen.SplashScreen)
                     {
                         inclusive=true
+
                     }
                 }
 
@@ -640,9 +648,75 @@ fun CountryPhoneInput(
 }
 
 @Composable
-fun ShowDialog() {
+fun ShowDialog(htmlContent:String) {
+    val  openDialog= remember{mutableStateOf(false)}
+    if(openDialog.value){
+       Dialog(
+           onDismissRequest = {
+               openDialog.value=false
+           }
 
-}
+       )
+
+           {
+               Box(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .wrapContentHeight()
+                       .background(Color.White, shape = RoundedCornerShape(8.dp))
+                       .padding(16.dp)
+               ) {
+                   Column(
+                       modifier = Modifier.padding(16.dp)
+                   ) {
+                       androidx.compose.material.Text(
+                           text = "Privacy Policy",
+                           modifier = Modifier.padding(bottom = 8.dp)
+                       )
+
+                       AndroidView(
+                           modifier = Modifier
+                               .fillMaxSize()
+                               .background(Color.White)
+                               .padding(16.dp),
+                           factory = { context ->
+                               TextView(context).apply {
+                                   text = Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_COMPACT)
+                                   movementMethod = LinkMovementMethod.getInstance()
+                               }
+                           }
+                       )
+                   }
+
+                   Row(
+                       modifier = Modifier
+                           .fillMaxWidth()
+                           .align(Alignment.BottomCenter)
+                           .padding(top = 16.dp),
+                       horizontalArrangement = Arrangement.SpaceBetween
+                   ) {
+                       // Dismiss Button
+                       Button(
+                           onClick = { openDialog.value = false },
+                           modifier = Modifier.padding(end = 8.dp)
+                       ) {
+                           androidx.compose.material.Text("Cancel")
+                       }
+
+                       // Confirm Button
+                       Button(
+                           onClick = { openDialog.value = false }
+                       ) {
+                           androidx.compose.material.Text("OK")
+                       }
+                   }
+               }
+           }
+
+       }
+    }
+
+
 
 
 
