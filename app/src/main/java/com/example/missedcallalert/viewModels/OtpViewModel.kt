@@ -1,5 +1,6 @@
 package com.example.missedcallalert.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,17 +55,33 @@ class OtpViewModel @Inject constructor(
 
 
     //otp request
-    fun requestOtp(phoneNumber: String, selectedCode: Country){
-        viewModelScope.launch{
-            try{
-               val result= otpRequestRepository.otpRequestFunction(phoneNumber,selectedCode)
-                _otpResponse.postValue(result)
+    fun requestOtp(phoneNumber: String, selectedCode: Country) {
+        viewModelScope.launch {
+            try {
+                // Set loading state
+                _otpResponse.value = Resource.Loading
+                Log.d("OtpRequest", "OTP request started. Waiting for response...")
 
-            }catch (e:Exception){
-                _otpResponse.postValue(Result.failure(e))
+                // Attempt to fetch OTP
+                val result = otpRequestRepository.otpRequestFunction(phoneNumber, selectedCode)
+
+                // If successful, update the response
+                if (result.isSuccess) {
+                    val otpData = result.getOrNull()
+                    _otpResponse.value = Resource.Success(otpData!!)
+                    Log.d("OtpRequest", "OTP retrieved successfully: $otpData")
+                } else {
+                    // If the Result indicates failure, handle the error
+                    throw result.exceptionOrNull() ?: Exception("Unknown error occurred")
+                }
+            } catch (e: Exception) {
+                // Handle exceptions by updating the response state
+                _otpResponse.value = Resource.Failure(e)
+                Log.d("OtpRequest", "Failed to retrieve OTP: ${e.message}")
             }
         }
     }
+
     //otp  validation
     fun validateOtp(inputOtp: String, username: String) {
         viewModelScope.launch {

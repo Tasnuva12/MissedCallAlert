@@ -1,6 +1,7 @@
 package com.example.missedcallalert.ui.Screens
 
 
+import android.app.AlertDialog
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -28,6 +29,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,15 +64,20 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.missedcallalert.AppConfigurationResponse
+import com.example.missedcallalert.InputType
 import com.example.missedcallalert.NetworkMonitor
 import com.example.missedcallalert.R
+import com.example.missedcallalert.Resource
+import com.example.missedcallalert.Screen
 import com.example.missedcallalert.data.Country
+import com.example.missedcallalert.isValid
 import com.example.missedcallalert.ui.Components.CustomButton
 import com.example.missedcallalert.ui.Components.CustomText
 import com.example.missedcallalert.viewModels.OtpViewModel
 import com.example.missedcallalert.viewModels.SplashScreenViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 val roboto = FontFamily(
@@ -354,6 +362,7 @@ fun SplashScreenBody(
 
 
 //function for the Dropdown menu and Phone NO field
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryPhoneInput(
     navController: NavController? = null,
@@ -375,7 +384,71 @@ fun CountryPhoneInput(
     val selectedCode by viewModel.country.observeAsState(countries.first())
     val phoneNo by viewModel.phoneNumber.observeAsState("")
 
-    val registrationState=viewModelOtp.
+    val showDialog = remember { mutableStateOf(false) }
+    val registrationState=viewModelOtp.otpResponse.collectAsState()
+    LaunchedEffect (registrationState.value){
+      when(val state=registrationState.value){
+          is Resource.Loading -> {
+              Log.d("SplashScreen","Loading")
+          }
+
+          is Resource.Success -> {
+            if(state.data?.status==1){
+                Toast.makeText(context,state.data?.data?.message,Toast.LENGTH_LONG).show()
+                showDialog.value=false
+                viewModelOtp.mPref.phoneNumber=phoneNo
+                //need to navigate to the otp verifiy screen here
+                navController?.navigate(Screen.OtpVerificationScreen){
+                    popUpTo(Screen.SplashScreen)
+                    {
+                        inclusive=true
+                    }
+                }
+
+
+
+
+            }
+              else {
+                  showDialog.value=false
+                Toast.makeText(context, "Failed, Try again.", Toast.LENGTH_LONG).show()
+                Log.d("SplashScreen", "Failed, Try again.")
+
+            }
+          }
+          is Resource.Failure ->{
+
+              showDialog.value=false
+              Toast.makeText(context, "Failed, Try again.", Toast.LENGTH_LONG).show()
+              Log.d("SplashScreen", "Failed, Try again.")
+
+          }
+
+      }
+    }
+
+    if(showDialog.value){
+        AlertDialog(
+            onDismissRequest = { },
+            confirmButton = {},
+            text = {
+                Box(
+                    modifier = Modifier
+                        .background(color = Color.White)
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            },
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
+            ),
+            containerColor = Color.White
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -505,22 +578,44 @@ fun CountryPhoneInput(
 
         }
 
+
+        val coroutineScope= rememberCoroutineScope()
         //Code for the button
         CustomButton(
-            modifier = Modifier,
+
 
             text = "Generate OTP",
             onClick = {
-                if (phoneNo != "") {
+               if(isInternetConnected){
+                   val trimmedPhoneNo=selectedCode.code +phoneNo.trim()
+                   if(trimmedPhoneNo.isBlank()){
+                       Toast.makeText(context,"Phone Number is required",Toast.LENGTH_LONG).show()
+                   }
+                   else if(!trimmedPhoneNo.isValid(InputType.PHONE)){
+                       Toast.makeText(context,"Phone Number is not valid",Toast.LENGTH_LONG).show()
+                   }
+                   else{
+                       showDialog.value=true
+                       viewModelOtp.requestOtp(
+                           trimmedPhoneNo,selectedCode
+                       )
+                   }
+               }
+                   else{
+                       coroutineScope.launch{
+                           snackbarHostState.showSnackbar(
+                               message="Please check your internet connection",
+                               actionLabel = "Retry",
+                               duration = SnackbarDuration.Short
+                           )
+                       }
 
-                    viewModelOtp.requestOtp(phoneNo, selectedCode)
+               }
+            },
 
-
-                } else {
-                    Toast.makeText(context, "Enter your phone number first.", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
+            modifier = Modifier
+                .width(280.dp)
+                .height(50.dp)
 
         )
 
@@ -536,7 +631,7 @@ fun CountryPhoneInput(
                 shape = RoundedCornerShape(16.dp),
             ) {
                 Text("this is alert box")
-            }
+             }
         }
 
     }
