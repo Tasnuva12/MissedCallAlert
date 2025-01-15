@@ -5,8 +5,9 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import javax.inject.Inject
 
-class SessionPreference(private val pref: SharedPreferences, context: Context) {
+class SessionPreference @Inject constructor(private val pref: SharedPreferences, context: Context) {
 
     val fcmToken: String="abed1234eff5678"
 
