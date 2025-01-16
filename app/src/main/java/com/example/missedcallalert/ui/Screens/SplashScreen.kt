@@ -84,6 +84,7 @@ import com.example.missedcallalert.viewModels.SplashScreenViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 
 val roboto = FontFamily(
@@ -100,7 +101,7 @@ val countries = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 //UI of splashscreen
-
+@Serializable
 @Composable
 fun SplashScreen(
     navController: NavController? = null,
