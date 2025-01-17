@@ -1,5 +1,6 @@
 package com.example.missedcallalert.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,33 +34,55 @@ class OtpViewModel @Inject constructor(
 ): ViewModel() {
 
     val mPref = sessionPreference
-    private val _otpResponse = MutableLiveData<Result<OTPResponseDataFormat>>()
-    val otpResponse: LiveData<Result<OTPResponseDataFormat>> get() = _otpResponse
+    //registration (requestOTP)
+    private val _otpResponse =  MutableStateFlow<Resource<OTPResponseDataFormat>>(Resource.Loading)
+    val otpResponse = _otpResponse.asStateFlow()
+
+   //app configuration
     private val _appConfigFlow= MutableStateFlow<Resource<AppConfigurationResponse>>(Resource.Loading)
     val appConfigFlow =_appConfigFlow.asStateFlow()
 
+    //login(login)
     private val _loginFlow =
         MutableStateFlow<Resource<LoginResponse?>>(Resource.Loading)
     val loginFlow = _loginFlow.asStateFlow()
 
+    //otp verification(validateOTP)
     private val _otpVerificationResult = MutableLiveData<Result<Boolean>>()
     val otpVerificationResult: LiveData<Result<Boolean>> get() = _otpVerificationResult
 
 
 
 
+    //otp request
+    fun requestOtp(phoneNumber: String, selectedCode: Country) {
+        viewModelScope.launch {
+            try {
+                // Set loading state
+                _otpResponse.value = Resource.Loading
+                Log.d("OtpRequest", "OTP request started. Waiting for response...")
 
-    fun requestOtp(phoneNumber: String, selectedCode: Country){
-        viewModelScope.launch{
-            try{
-               val result= otpRequestRepository.otpRequestFunction(phoneNumber,selectedCode)
-                _otpResponse.postValue(result)
+                // Attempt to fetch OTP
+                val result = otpRequestRepository.otpRequestFunction(phoneNumber, selectedCode)
 
-            }catch (e:Exception){
-                _otpResponse.postValue(Result.failure(e))
+                // If successful, update the response
+                if (result.isSuccess) {
+                    val otpData = result.getOrNull()
+                    _otpResponse.value = Resource.Success(otpData!!)
+                    Log.d("OtpRequest", "OTP retrieved successfully: $otpData")
+                } else {
+                    // If the Result indicates failure, handle the error
+                    throw result.exceptionOrNull() ?: Exception("Unknown error occurred")
+                }
+            } catch (e: Exception) {
+                // Handle exceptions by updating the response state
+                _otpResponse.value = Resource.Failure(e)
+                Log.d("OtpRequest", "Failed to retrieve OTP: ${e.message}")
             }
         }
     }
+
+    //otp  validation
     fun validateOtp(inputOtp: String, username: String) {
         viewModelScope.launch {
             try {
@@ -72,7 +95,7 @@ class OtpViewModel @Inject constructor(
             }
         }
     }
-
+    //otp login
     fun login() {
        viewModelScope.launch{
            try {
@@ -101,4 +124,11 @@ class OtpViewModel @Inject constructor(
     }
 
 
+
+
+
+
+
+
 }
+

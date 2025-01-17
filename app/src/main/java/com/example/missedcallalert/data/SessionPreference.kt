@@ -5,8 +5,9 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import javax.inject.Inject
 
-class SessionPreference(private val pref: SharedPreferences, context: Context) {
+class SessionPreference @Inject constructor(private val pref: SharedPreferences, context: Context) {
 
     val fcmToken: String="abed1234eff5678"
 
@@ -38,6 +39,7 @@ class SessionPreference(private val pref: SharedPreferences, context: Context) {
         private const val PREF_DEVICE_TYPE = "pref_device_type"
         private const val PREF_USER_IP="pref_user_ip"
         private const val PREF_PHONE_NUMBER = "pref_number"
+        private const val PREF_APP_CONFIG_DATA="pref_app_config_data"
     }
 
     // Method to save session data
@@ -90,4 +92,7 @@ class SessionPreference(private val pref: SharedPreferences, context: Context) {
     var phoneNumber: String
         get() = pref.getString(PREF_PHONE_NUMBER, "") ?: ""
         set(phoneNumber) = pref.edit { putString(PREF_PHONE_NUMBER, phoneNumber) }
+    var setAppConfigData: String
+        get() = pref.getString(PREF_APP_CONFIG_DATA, "") ?: ""
+        set(value) = pref.edit { putString(PREF_APP_CONFIG_DATA, value) }
 }

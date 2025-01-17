@@ -35,14 +35,6 @@ class SplashScreenViewModel @Inject constructor(
     fun setCountryCode(country: Country){
         _country.value=country
     }
-    fun getAppConfig() {
-        viewModelScope.launch {
-            val response = resultFromExternalResponse {
-                applicationConfigurationService.execute()
-            }
-            _appConfigFlow.value = response
-        }
-    }
 
 
 

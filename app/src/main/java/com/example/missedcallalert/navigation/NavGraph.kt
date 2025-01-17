@@ -24,8 +24,10 @@ fun NavGraph(navController: NavHostController, paddingValues: PaddingValues) {
     //Navigation graph set up
     NavHost(navController = navController, startDestination = Screen.SplashScreen) {
         composable<Screen.SplashScreen> {
-            SplashScreen(navController=navController,
-                modifier = Modifier.padding(paddingValues))
+            SplashScreen(
+                navController,
+                modifier = Modifier.padding(paddingValues)
+            )
         }
         composable<Screen.OtpVerificationScreen> {
             OtpVerificationScreen(
