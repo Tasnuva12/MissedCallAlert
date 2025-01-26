@@ -4,15 +4,19 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Screen
-{
+sealed class Screen {
+    @Serializable
+    data object SplashScreen : Screen() {
+        val route = "splash_screen"
+    }
 
     @Serializable
-    data object SplashScreen:Screen()
-    @Serializable
-    data object OtpVerificationScreen:Screen()
+    data object OtpVerificationScreen : Screen() {
+        val route = "otp_verification_screen"
+    }
 
     @Serializable
-    data object HomeScreen:Screen()
-
+    data object HomeScreen : Screen() {
+        val route = "home_screen"
+    }
 }

@@ -7,5 +7,6 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     //hilt
     id("com.google.dagger.hilt.android") version "2.51.1" apply false
+
 }
 

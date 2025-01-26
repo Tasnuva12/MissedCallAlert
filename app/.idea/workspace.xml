@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1458a2db-818f-4618-ad0d-e0b91a925efc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../.idea/appInsightsSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/AppModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/data/SessionPreference.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/data/SessionPreference.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/navigation/NavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/navigation/NavGraph.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/ui/Screens/SplashScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/ui/Screens/SplashScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/viewModels/OtpViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/viewModels/OtpViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/viewModels/SplashScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/missedcallalert/viewModels/SplashScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +36,8 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/NewsHub",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
